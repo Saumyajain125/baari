@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * baari design tokens, lifted verbatim from design/Clinic Queue Brand.html.
+ * Use these via Tailwind utilities (bg-canvas, text-muted, border-line, ...)
+ * rather than raw hex values in components.
+ */
+@theme {
+  --color-canvas: #f4f6f5; /* app background */
+  --color-surface: #ffffff;
+  --color-ink: #142121; /* primary text, dark buttons, toast */
+  --color-muted: #5b6b6a; /* secondary text */
+  --color-faint: #7a8a89; /* disabled text */
+  --color-line: #dce3e2; /* card borders, header rule */
+  --color-line-strong: #c9d3d2; /* button outlines, input borders, placeholder token */
+  --color-divider: #edf1f0; /* row separators */
+  --color-subtle: #f2f5f4; /* chip / icon-button fill */
+  --color-hover: #eef2f1;
+  --color-dash: #9aa6a5; /* dashed slip border, empty PIN dots */
+  --color-scrim: #8a9493; /* modal backdrop */
+
+  --color-teal: #0e7c7b; /* brand primary */
+  --color-teal-dark: #0a5958; /* pressed shadow, teal text on tint */
+  --color-teal-darker: #063f3e;
+  --color-teal-tint: #e6f2f1;
+  --color-teal-soft: #b9d9d7;
+  --color-teal-bright: #3fb8b6; /* undo button on dark toast */
+  --color-teal-ink: #0e1717;
+
+  --color-danger: #b42318;
+  --color-danger-tint: #fdf1ef;
+  --color-danger-line: #f1b8b2;
+
+  --color-warn: #b54708; /* long waits, not-synced */
+  --color-warn-tint: #fffaf2; /* no-reply row */
+  --color-amber: #7a3a06; /* offline banner text */
+  --color-amber-tint: #fef3e2;
+  --color-amber-line: #f6d9a8;
+  --color-amber-chip: #fbe1b5;
+
+  --color-indigo: #33408f; /* follow-up text */
+  --color-indigo-tint: #eef0fb;
+
+  --font-sans: var(--font-inter), var(--font-devanagari), system-ui, sans-serif;
+  --font-display: var(--font-baloo), var(--font-devanagari), sans-serif;
+  --font-slip: "Courier New", Courier, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Base element styles live in the base layer so Tailwind utilities can
+ * override them (focus rings, link colours) without !important. */
+@layer base {
+  html,
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Default (subpixel) font smoothing on purpose: the design artboards were
+   * rendered with it, and "antialiased" draws every glyph visibly lighter. */
+  body {
+    font-family: var(--font-sans);
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  a {
+    color: var(--color-teal-dark);
+  }
+
+  a:hover {
+    color: var(--color-teal-darker);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-teal);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Elements marked .print-only appear on paper only; .no-print never does. */
+.print-only {
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  html,
+  body {
+    background: #ffffff;
+  }
 }

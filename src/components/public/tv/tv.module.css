@@ -1,0 +1,61 @@
+/*
+ * "Now calling" flash: the panel blinks teal three times when a token is
+ * called (Next or Call again), so heads turn even with the sound off.
+ * The elements are re-keyed on each call, so the animation runs once per call.
+ */
+.flashBox {
+  animation: tv-flash-box 3.2s ease-out both;
+}
+
+.flashToken {
+  animation: tv-flash-token 3.2s ease-out both;
+}
+
+@keyframes tv-flash-box {
+  0%,
+  26%,
+  52% {
+    background-color: var(--color-teal);
+    color: #ffffff;
+  }
+  13%,
+  39%,
+  100% {
+    background-color: var(--color-teal-tint);
+    color: var(--color-teal-dark);
+  }
+}
+
+@keyframes tv-flash-token {
+  0%,
+  26%,
+  52% {
+    color: #ffffff;
+    transform: scale(1.06);
+  }
+  13%,
+  39%,
+  100% {
+    color: var(--color-teal);
+    transform: scale(1);
+  }
+}
+
+@keyframes tv-flash-token-still {
+  0%,
+  26%,
+  52% {
+    color: #ffffff;
+  }
+  13%,
+  39%,
+  100% {
+    color: var(--color-teal);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flashToken {
+    animation-name: tv-flash-token-still;
+  }
+}

@@ -1,0 +1,378 @@
+rules_version = '2';
+
+// baari security rules. Data model: src/lib/types.ts; rationale: docs/FIREBASE.md.
+//
+// Three kinds of caller:
+//   - the clinic account (email/password) whose uid has a members/{uid} doc:
+//     runs the desk, may write anything in its clinic as long as the shape is valid;
+//   - a patient on their own phone (anonymous auth): may take the next token by
+//     QR, read their own name back, update how far away they are, or leave;
+//   - anyone else (TV display, QR join page before sign-in): public reads only.
+//
+// Everything not matched below is denied.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------------------------------------------------------------- paths
+
+    function clinicDoc(c) { return /databases/$(database)/documents/clinics/$(c); }
+    function memberDoc(c, uid) { return /databases/$(database)/documents/clinics/$(c)/members/$(uid); }
+    function doctorDoc(c, id) { return /databases/$(database)/documents/clinics/$(c)/doctors/$(id); }
+    function queueDoc(c, qid) { return /databases/$(database)/documents/clinics/$(c)/queues/$(qid); }
+    function ticketDoc(c, id) { return /databases/$(database)/documents/clinics/$(c)/tickets/$(id); }
+    function privateDoc(c, id) { return /databases/$(database)/documents/clinics/$(c)/ticketPrivate/$(id); }
+
+    // ---------------------------------------------------------------- callers
+
+    function signedIn() { return request.auth != null; }
+
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // Clinic accounts sign in with email/password; patients are anonymous.
+    function isClinicAccount() {
+      return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
+
+    function isMember(c) { return signedIn() && exists(memberDoc(c, request.auth.uid)); }
+
+    function ownsClinic(c) { return signedIn() && get(clinicDoc(c)).data.ownerUid == request.auth.uid; }
+
+    // getAfter: true inside the setup batch that creates the clinic as well.
+    function ownsClinicAfter(c) { return signedIn() && getAfter(clinicDoc(c)).data.ownerUid == request.auth.uid; }
+
+    // First-run setup writes clinic, member, users doc, doctors and staff in one
+    // batch. exists() sees the database before the batch, so the new owner isn't
+    // a member yet while their doctors and staff are being written.
+    function isSettingUp(c) { return signedIn() && !exists(clinicDoc(c)) && ownsClinicAfter(c); }
+
+    function canManage(c) { return isMember(c) || isSettingUp(c); }
+
+    // ---------------------------------------------------------------- values
+
+    function hasExactly(d, keys) { return d.keys().hasAll(keys) && d.keys().hasOnly(keys); }
+
+    // A string of at most `max` characters with at least `min` non-blank ones.
+    function isText(v, min, max) { return v is string && v.trim().size() >= min && v.size() <= max; }
+
+    // Firestore auto ids and the seed's readable ids; safe to build paths from.
+    function isId(v) { return v is string && v.matches('^[A-Za-z0-9_-]{1,128}$'); }
+
+    // Clinic-local "YYYY-MM-DD".
+    function isDateKey(v) { return v is string && v.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$'); }
+
+    // Epoch milliseconds from the writing device's clock.
+    function isTime(v) { return v is number && v >= 0; }
+    function isTimeOrNull(v) { return v == null || isTime(v); }
+
+    // Within 5 minutes of the server's clock. Patients join online, so a stamp
+    // further off means a wrong phone clock, which would skew waits and ETAs.
+    // (Desk writes aren't held to this: they may sync long after an outage.)
+    function isNearNow(v) {
+      return isTime(v)
+        && v >= request.time.toMillis() - 300000
+        && v <= request.time.toMillis() + 300000;
+    }
+
+    // Normalised Indian mobile: 10 digits, no prefix.
+    function isPhoneOrNull(v) { return v == null || (v is string && v.matches('^[0-9]{10}$')); }
+
+    function visitTypes() { return ['new', 'follow_up', 'emergency']; }
+    function distances() { return ['here', 'under_15', '15_30', 'over_30']; }
+    function statuses() { return ['waiting', 'serving', 'done', 'no_show', 'removed']; }
+
+    // Mirrors tokenLabel() in src/lib/queue/logic.ts: "A-07", "A-25", "A-100".
+    function tokenLabel(prefix, token) {
+      return prefix + '-' + (token < 10 ? '0' + string(token) : string(token));
+    }
+
+    // ---------------------------------------------------------------- shapes
+
+    function validClinic(d) {
+      return hasExactly(d, ['name', 'ownerUid', 'timezone', 'defaultConsultMin', 'lockAfterMin', 'createdAt'])
+        && isText(d.name, 1, 80)
+        && isText(d.ownerUid, 1, 128)
+        && isText(d.timezone, 1, 64)
+        && d.defaultConsultMin is number && d.defaultConsultMin > 0 && d.defaultConsultMin <= 120
+        && d.lockAfterMin is number && d.lockAfterMin >= 0 && d.lockAfterMin <= 1440
+        && isTime(d.createdAt);
+    }
+
+    function validMember(c, uid, d) {
+      return hasExactly(d, ['uid', 'role', 'addedAt'])
+        && d.uid == uid
+        && d.role in ['owner', 'desk']
+        && isTime(d.addedAt)
+        // Only the clinic's owner can hold the owner role.
+        && (d.role == 'desk' || getAfter(clinicDoc(c)).data.ownerUid == uid);
+    }
+
+    function validProfile(uid, d) {
+      return hasExactly(d, ['clinicId'])
+        && isId(d.clinicId)
+        // An account can only point itself at a clinic it owns or belongs to.
+        && (existsAfter(memberDoc(d.clinicId, uid)) || getAfter(clinicDoc(d.clinicId)).data.ownerUid == uid);
+    }
+
+    function validDoctor(d) {
+      return hasExactly(d, ['name', 'prefix', 'room', 'order', 'startsAt', 'active'])
+        && isText(d.name, 1, 80)
+        && d.prefix is string && d.prefix.matches('^[A-Z]$')
+        && isText(d.room, 0, 40)
+        && d.order is number
+        && (d.startsAt == null || (d.startsAt is string && d.startsAt.matches('^([01][0-9]|2[0-3]):[0-5][0-9]$')))
+        && d.active is bool;
+    }
+
+    function validStaff(d) {
+      return hasExactly(d, ['name', 'initials', 'pinHash', 'pinSalt', 'order'])
+        && isText(d.name, 1, 60)
+        && isText(d.initials, 1, 3)
+        // hex(SHA-256(salt + ":" + pin)), see src/lib/pin.ts. Raw PINs never reach Firestore.
+        && d.pinHash is string && d.pinHash.matches('^[0-9a-f]{64}$')
+        && d.pinSalt is string && d.pinSalt.matches('^[0-9a-f]{16,128}$')
+        && d.order is number;
+    }
+
+    function validPause(p) {
+      return p is map
+        && hasExactly(p, ['reason', 'since', 'backAt'])
+        && isText(p.reason, 1, 60)
+        && isTime(p.since)
+        && isTimeOrNull(p.backAt);
+    }
+
+    // Desk writes merge into queue days (pause, resume, heartbeat, offline
+    // walk-ins), so only the identifying fields are required.
+    function validQueue(c, qid, d) {
+      return d.keys().hasAll(['clinicId', 'doctorId', 'date'])
+        && d.keys().hasOnly(['clinicId', 'doctorId', 'date', 'lastToken', 'paused', 'doctorButtonSeenAt'])
+        && d.clinicId == c
+        && isId(d.doctorId)
+        && isDateKey(d.date)
+        && qid == d.doctorId + '_' + d.date
+        && (!('lastToken' in d) || (d.lastToken is int && d.lastToken >= 0 && d.lastToken <= 9999))
+        && (!('paused' in d) || d.paused == null || validPause(d.paused))
+        && (!('doctorButtonSeenAt' in d) || isTimeOrNull(d.doctorButtonSeenAt));
+    }
+
+    function validTicket(c, d) {
+      return hasExactly(d, [
+          'clinicId', 'doctorId', 'date', 'token', 'label', 'status', 'position', 'priority',
+          'visitType', 'distance', 'source', 'createdAt', 'calledAt', 'lastCallAt', 'callCount',
+          'noReplyAt', 'finishedAt', 'consultMs', 'updatedBy', 'updatedAt'
+        ])
+        && d.clinicId == c
+        && isId(d.doctorId)
+        && isDateKey(d.date)
+        && d.token is int && d.token >= 1 && d.token <= 9999
+        && isText(d.label, 3, 16)
+        && d.status in statuses()
+        && d.position is number
+        && d.priority is bool
+        && d.visitType in visitTypes()
+        && d.distance in distances()
+        && d.source in ['walk_in', 'qr']
+        && isTime(d.createdAt)
+        && isTimeOrNull(d.calledAt)
+        && isTimeOrNull(d.lastCallAt)
+        && d.callCount is int && d.callCount >= 0
+        && isTimeOrNull(d.noReplyAt)
+        && isTimeOrNull(d.finishedAt)
+        && (d.consultMs == null || (d.consultMs is number && d.consultMs >= 0))
+        && (d.updatedBy == null || isText(d.updatedBy, 1, 128))
+        && isTime(d.updatedAt);
+    }
+
+    function validPrivate(c, d) {
+      return hasExactly(d, ['clinicId', 'date', 'name', 'phone', 'patientUid'])
+        && d.clinicId == c
+        && isDateKey(d.date)
+        && isText(d.name, 1, 80)
+        && isPhoneOrNull(d.phone)
+        && (d.patientUid == null || isText(d.patientUid, 1, 128));
+    }
+
+    function validOutbox(c, d) {
+      return hasExactly(d, ['clinicId', 'to', 'kind', 'body', 'status', 'createdAt'])
+        && d.clinicId == c
+        && d.to is string && d.to.matches('^[0-9]{10}$')
+        && d.kind in ['pause', 'resume', 'turn_soon', 'joined']
+        && isText(d.body, 1, 1000)
+        // A server-side sender owns the status from here on.
+        && d.status == 'queued'
+        && isTime(d.createdAt);
+    }
+
+    // ---------------------------------------------------------------- patient joins by QR
+    // src/lib/queue/patient.ts joinQueue(): one transaction that bumps (or
+    // creates) the queue day, creates the ticket and creates its private doc.
+
+    // First patient of the day for this doctor: the counter starts at 1, unpaused.
+    function patientOpensQueue(c, qid) {
+      let d = request.resource.data;
+      return signedIn()
+        && validQueue(c, qid, d)
+        && d.get('lastToken', 0) == 1
+        && d.get('paused', null) == null
+        && d.get('doctorButtonSeenAt', null) == null
+        && get(doctorDoc(c, d.doctorId)).data.get('active', true) == true;
+    }
+
+    // Later patients only ever move the counter on by one.
+    function patientTakesToken() {
+      return signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastToken'])
+        && request.resource.data.lastToken == resource.data.get('lastToken', 0) + 1;
+    }
+
+    function patientJoins(c, id) {
+      let d = request.resource.data;
+      let queue = queueDoc(c, d.doctorId + '_' + d.date);
+      let doctor = get(doctorDoc(c, d.doctorId)).data;
+      let lastTokenBefore = exists(queue) ? get(queue).data.get('lastToken', 0) : 0;
+      return signedIn()
+        && validTicket(c, d)
+        && d.source == 'qr'
+        && d.status == 'waiting'
+        && d.priority == false
+        && d.callCount == 0
+        && d.calledAt == null
+        && d.lastCallAt == null
+        && d.noReplyAt == null
+        && d.finishedAt == null
+        && d.consultMs == null
+        && d.updatedBy == 'patient'
+        && isNearNow(d.createdAt)
+        && isNearNow(d.updatedAt)
+        && doctor.get('active', true) == true
+        // The token is freshly taken from the counter in this same transaction.
+        && d.token == lastTokenBefore + 1
+        && getAfter(queue).data.lastToken == d.token
+        && d.label == tokenLabel(doctor.prefix, d.token)
+        && d.position == d.token * 1000
+        // ...and bound to this patient through its private doc.
+        && getAfter(privateDoc(c, id)).data.patientUid == request.auth.uid;
+    }
+
+    function patientCreatesPrivate(c, id) {
+      let d = request.resource.data;
+      let ticket = ticketDoc(c, id);
+      return signedIn()
+        && validPrivate(c, d)
+        && d.patientUid == request.auth.uid
+        && !exists(ticket)
+        && existsAfter(ticket)
+        && getAfter(ticket).data.source == 'qr'
+        && getAfter(ticket).data.date == d.date;
+    }
+
+    // The joining patient's uid is on the private doc (walk-ins have null there).
+    function patientOwnsTicket(c, id) {
+      return signedIn() && get(privateDoc(c, id)).data.patientUid == request.auth.uid;
+    }
+
+    // "Update how far you are."
+    function patientUpdatesDistance() {
+      let d = request.resource.data;
+      return d.diff(resource.data).affectedKeys().hasOnly(['distance', 'updatedAt', 'updatedBy'])
+        && resource.data.status in ['waiting', 'serving']
+        && d.distance in distances()
+        && d.updatedBy == 'patient'
+        && isTime(d.updatedAt);
+    }
+
+    // "Leave the queue."
+    function patientLeaves() {
+      let d = request.resource.data;
+      return d.diff(resource.data).affectedKeys().hasOnly(['status', 'finishedAt', 'updatedAt', 'updatedBy'])
+        && resource.data.status == 'waiting'
+        && d.status == 'removed'
+        && isTime(d.finishedAt)
+        && d.updatedBy == 'patient'
+        && isTime(d.updatedAt);
+    }
+
+    // ---------------------------------------------------------------- collections
+
+    match /users/{uid} {
+      allow read, delete: if isSelf(uid);
+      allow create, update: if isSelf(uid) && validProfile(uid, request.resource.data);
+    }
+
+    match /clinics/{c} {
+      // Public so the TV, poster and join pages can show the clinic's name.
+      // No list: clinics can't be enumerated.
+      allow get: if true;
+      allow create: if isClinicAccount()
+        && validClinic(request.resource.data)
+        && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if isMember(c)
+        && validClinic(request.resource.data)
+        && request.resource.data.ownerUid == resource.data.ownerUid;
+
+      match /members/{uid} {
+        // Self-get lets a device check its own membership without an error.
+        allow get: if isSelf(uid) || isMember(c);
+        allow list: if isMember(c);
+        allow create: if ownsClinicAfter(c) && validMember(c, uid, request.resource.data);
+        allow delete: if ownsClinic(c);
+      }
+
+      match /doctors/{doctorId} {
+        allow read: if true;
+        allow create, update: if canManage(c) && validDoctor(request.resource.data);
+        allow delete: if isMember(c);
+      }
+
+      // PIN hashes: members only.
+      match /staff/{staffId} {
+        allow read, delete: if isMember(c);
+        allow create, update: if canManage(c) && validStaff(request.resource.data);
+      }
+
+      match /queues/{qid} {
+        allow read: if true;
+        // Ternaries keep the patient checks (and their document reads) off the
+        // desk's large batches.
+        allow create: if isMember(c)
+          ? validQueue(c, qid, request.resource.data)
+          : patientOpensQueue(c, qid);
+        allow update: if isMember(c)
+          ? validQueue(c, qid, request.resource.data)
+          : patientTakesToken();
+        allow delete: if isMember(c);
+      }
+
+      // Public (TV display, patient status page): tokens only, no names or phones.
+      match /tickets/{id} {
+        allow read: if true;
+        allow create: if isMember(c)
+          ? validTicket(c, request.resource.data)
+          : patientJoins(c, id);
+        allow update: if isMember(c)
+          ? validTicket(c, request.resource.data)
+          : patientOwnsTicket(c, id) && (patientUpdatesDistance() || patientLeaves());
+        allow delete: if isMember(c);
+      }
+
+      // Names and phone numbers.
+      match /ticketPrivate/{id} {
+        allow read: if isMember(c);
+        allow get: if signedIn() && resource.data.patientUid == request.auth.uid;
+        allow create: if isMember(c)
+          ? validPrivate(c, request.resource.data)
+          : patientCreatesPrivate(c, id);
+        allow update: if isMember(c) && validPrivate(c, request.resource.data);
+        allow delete: if isMember(c);
+      }
+
+      // WhatsApp messages queued by the desk. A server-side sender (Admin SDK,
+      // which bypasses these rules) delivers them and updates their status.
+      match /outbox/{id} {
+        allow read: if isMember(c);
+        allow create: if isMember(c) && validOutbox(c, request.resource.data);
+      }
+    }
+  }
+}

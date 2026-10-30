@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Pause queue</title>
+<script src="f5a744b7-6810-491e-a10f-d1fec3825602"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0A5958}a:hover{color:#063F3E}
+.chip{height:52px;padding:0 18px;border-radius:999px;border:1px solid #C9D3D2;background:#FFFFFF;color:#142121;font:500 15px Inter,sans-serif}
+.chip[aria-pressed="true"]{border:2px solid #0E7C7B;background:#E6F2F1;color:#0A5958;font-weight:600}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: #8A9493; color: #142121; font-family: Inter, 'Noto Sans Devanagari', system-ui, sans-serif; display: flex; align-items: center; justify-content: center; padding: 40px">
+
+<div role="dialog" aria-modal="true" aria-labelledby="pt" style="width: 620px; box-sizing: border-box; border-radius: 24px; background: #FFFFFF; box-shadow: 0 24px 60px rgba(20,33,33,.35); display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 22px 24px 4px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="pt" style="margin: 0; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 26px">Pause Dr. Anita Sharma's queue</h2>
+<span style="font-size: 14px; color: #5B6B6A">Nobody loses their place. ETAs freeze until you resume.</span>
+</div>
+<button aria-label="Close" style="width: 48px; height: 48px; border: 0; border-radius: 14px; background: #F2F5F4; color: #142121; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; padding: 16px 24px 24px">
+<fieldset style="margin: 0; padding: 0; border: 0">
+<legend style="padding: 0; margin-bottom: 10px; font-size: 15px; font-weight: 600">Reason patients will see</legend>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button class="chip" aria-pressed="true">Lunch break</button>
+<button class="chip" aria-pressed="false">Emergency case</button>
+<button class="chip" aria-pressed="false">Ward round</button>
+<button class="chip" aria-pressed="false">Tea break</button>
+<button class="chip" aria-pressed="false">Type your own</button>
+</div>
+</fieldset>
+<fieldset style="margin: 0; padding: 0; border: 0">
+<legend style="padding: 0; margin-bottom: 10px; font-size: 15px; font-weight: 600">Back in</legend>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button class="chip" aria-pressed="false">15 min</button>
+<button class="chip" aria-pressed="false">30 min</button>
+<button class="chip" aria-pressed="true">45 min (1:30 PM)</button>
+<button class="chip" aria-pressed="false">Not sure</button>
+</div>
+</fieldset>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 16px; background: #F4F6F5">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #5B6B6A">Patients and TV will show</span>
+<span style="font-size: 16px"><strong>Doctor is on a short break</strong> (Lunch). Back around 1:30 PM. Your place is safe.</span>
+<label style="display: flex; align-items: center; gap: 10px; font-size: 15px; min-height: 44px">
+<input type="checkbox" checked="" style="width: 22px; height: 22px; margin: 0; accent-color: #0E7C7B">
+Also send a WhatsApp update to the 9 people waiting
+</label>
+</div>
+<div style="display: flex; gap: 10px">
+<button style="flex: 1 1 0; height: 60px; border: 1px solid #C9D3D2; border-radius: 16px; background: #FFFFFF; color: #142121; font: 600 16px Inter, sans-serif">Cancel</button>
+<button style="flex: 2 1 0; height: 60px; border: 0; border-radius: 16px; background: #142121; color: #FFFFFF; font: 700 19px 'Baloo 2', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px">
+<svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+Pause queue
+</button>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+
+
+</body></html>

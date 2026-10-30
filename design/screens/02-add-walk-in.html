@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Add walk-in</title>
+<script src="8a9b8431-7f3e-440c-bf12-000c808abe9f"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0A5958}a:hover{color:#063F3E}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: #8A9493; color: #142121; font-family: Inter, 'Noto Sans Devanagari', system-ui, sans-serif; display: flex; align-items: center; justify-content: center; gap: 24px; padding: 40px">
+
+<div role="dialog" aria-modal="true" aria-labelledby="wt" style="width: 540px; box-sizing: border-box; border-radius: 24px; background: #FFFFFF; box-shadow: 0 24px 60px rgba(20,33,33,.35); display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 22px 24px 8px">
+<h2 id="wt" style="margin: 0; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 26px">Add walk-in patient</h2>
+<button aria-label="Close" style="width: 48px; height: 48px; border: 0; border-radius: 14px; background: #F2F5F4; color: #142121; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 18px; padding: 12px 24px 24px">
+<fieldset style="margin: 0; padding: 0; border: 0">
+<legend style="padding: 0; margin-bottom: 8px; font-size: 15px; font-weight: 600">Doctor</legend>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button aria-pressed="true" style="height: 56px; border-radius: 14px; border: 2px solid #0E7C7B; background: #E6F2F1; color: #0A5958; font: 600 15px Inter, sans-serif">A · Dr. Anita Sharma</button>
+<button aria-pressed="false" style="height: 56px; border-radius: 14px; border: 1px solid #C9D3D2; background: #FFFFFF; color: #142121; font: 500 15px Inter, sans-serif">B · Dr. Rohit Verma</button>
+</div>
+</fieldset>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="wn" style="font-size: 15px; font-weight: 600">Patient name</label>
+<input id="wn" type="text" value="Kamla Bai" style="height: 56px; box-sizing: border-box; padding: 0 16px; border-radius: 14px; border: 2px solid #0E7C7B; font: 400 18px Inter, sans-serif; color: #142121">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="wp" style="font-size: 15px; font-weight: 600">Mobile <span style="font-weight: 400; color: #5B6B6A">(optional, for WhatsApp updates)</span></label>
+<input id="wp" type="tel" placeholder="Leave empty if no smartphone" style="height: 56px; box-sizing: border-box; padding: 0 16px; border-radius: 14px; border: 1px solid #C9D3D2; font: 400 18px Inter, sans-serif; color: #142121">
+</div>
+<fieldset style="margin: 0; padding: 0; border: 0">
+<legend style="padding: 0; margin-bottom: 8px; font-size: 15px; font-weight: 600">Visit type</legend>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button aria-pressed="true" style="height: 52px; border-radius: 14px; border: 2px solid #0E7C7B; background: #E6F2F1; color: #0A5958; font: 600 15px Inter, sans-serif">New</button>
+<button aria-pressed="false" style="height: 52px; border-radius: 14px; border: 1px solid #C9D3D2; background: #FFFFFF; color: #142121; font: 500 15px Inter, sans-serif">Follow-up</button>
+<button aria-pressed="false" style="height: 52px; border-radius: 14px; border: 1px solid #F1B8B2; background: #FFFFFF; color: #B42318; font: 600 15px Inter, sans-serif">Emergency</button>
+</div>
+</fieldset>
+<div style="display: flex; gap: 10px; margin-top: 4px">
+<button style="flex: 1 1 0; height: 60px; border: 1px solid #C9D3D2; border-radius: 16px; background: #FFFFFF; color: #142121; font: 600 16px Inter, sans-serif">Cancel</button>
+<button style="flex: 2 1 0; height: 60px; border: 0; border-radius: 16px; background: #0E7C7B; color: #FFFFFF; font: 700 19px 'Baloo 2', sans-serif">Issue token A-25</button>
+</div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px; width: 360px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 24px; border-radius: 24px; background: #FFFFFF; box-shadow: 0 24px 60px rgba(20,33,33,.35)">
+<span style="display: flex; align-items: center; gap: 8px; color: #0A5958; font-weight: 600; font-size: 15px"><svg width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Token issued</span>
+<div aria-label="Printed token slip preview" style="width: 232px; box-sizing: border-box; padding: 18px 16px; background: #FFFFFF; border: 1px dashed #9AA6A5; font-family: 'Courier New', monospace; color: #000000; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+<span style="font-size: 13px; font-weight: 700">SHARMA FAMILY CLINIC</span>
+<span style="font-size: 11px">Dr. Anita Sharma · Room 2</span>
+<span style="font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 72px; line-height: 1">A-25</span>
+<span style="font-size: 12px">7 ahead · approx 35 to 45 min</span>
+<span style="font-size: 12px" lang="hi">आपसे पहले 7 लोग</span>
+<span style="font-size: 11px">Watch the TV screen for your number</span>
+<span style="font-size: 10px">29-10-2026 · 10:51 AM</span>
+</div>
+<div style="display: flex; gap: 10px; width: 100%">
+<button style="flex: 1 1 0; height: 56px; border: 0; border-radius: 16px; background: #0E7C7B; color: #FFFFFF; font: 600 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px">
+<svg width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"></path><rect x="3" y="9" width="18" height="8" rx="2"></rect><path d="M6 14h12v7H6z"></path></svg>
+Print slip
+</button>
+<button style="flex: 1 1 0; height: 56px; border: 1px solid #C9D3D2; border-radius: 16px; background: #FFFFFF; color: #142121; font: 600 16px Inter, sans-serif">Done</button>
+</div>
+<span style="font-size: 13px; color: #5B6B6A; text-align: center">No printer? Write the number on a paper token, or show this screen to the patient.</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+
+
+</body></html>

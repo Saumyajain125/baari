@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Reception, all doctors</title>
+<script src="6b23a8bf-6bb7-4adf-80bd-bbcfd22e1cf5"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0A5958}a:hover{color:#063F3E}
+.ib{width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:#5B6B6A;display:flex;align-items:center;justify-content:center}
+.ib:hover{background:#EEF2F1;color:#142121}
+.kbd{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:6px;background:rgba(255,255,255,.18);font:600 12px Inter,sans-serif}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; background: #F4F6F5; color: #142121; font-family: Inter, 'Noto Sans Devanagari', system-ui, sans-serif; display: flex; flex-direction: column">
+
+<header style="display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #DCE3E2">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="30" height="30" sc-camel-view-box="0 0 128 128" aria-hidden="true"><path d="M30,16 H98 A22,22 0 0 1 120,38 V52 A12,12 0 0 0 120,76 V90 A22,22 0 0 1 98,112 H30 A22,22 0 0 1 8,90 V76 A12,12 0 0 0 8,52 V38 A22,22 0 0 1 30,16 Z" fill="#0E7C7B"></path><circle cx="38" cy="64" r="6" fill="#FFFFFF" fill-opacity="0.45"></circle><circle cx="60" cy="64" r="6" fill="#FFFFFF" fill-opacity="0.72"></circle><circle cx="88" cy="64" r="13" fill="#FFFFFF"></circle></svg>
+<span style="font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 18px">Sharma Family Clinic</span>
+<span style="font-size: 13px; color: #5B6B6A">Thu, 29 Oct · Morning</span>
+</div>
+<div style="flex: 1 1 0; display: flex; justify-content: center; gap: 24px; font-size: 14px">
+<span><span style="color: #5B6B6A">In queue</span> <strong>14</strong></span>
+<span><span style="color: #5B6B6A">Served</span> <strong>31</strong></span>
+<span><span style="color: #5B6B6A">Avg consult</span> <strong>5.8 min</strong></span>
+<span><span style="color: #5B6B6A">Avg wait</span> <strong>22 min</strong></span>
+</div>
+<label style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid #DCE3E2; width: 240px; box-sizing: border-box">
+<svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="#5B6B6A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input aria-label="Find patient" placeholder="Find token, name or phone" style="flex: 1 1 0; min-width: 0; border: 0; outline: none; font: 400 14px Inter, sans-serif">
+</label>
+<button style="height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: #0E7C7B; color: #FFFFFF; font: 600 14px Inter, sans-serif; display: flex; align-items: center; gap: 8px">
+<svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add walk-in <span class="kbd">W</span>
+</button>
+</header>
+
+<div style="flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 20px 24px">
+<sc-for list="{{docs}}" as="d" hint-placeholder-count="2">
+<section style="display: flex; flex-direction: column; gap: 14px; min-height: 0">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 34px; height: 34px; border-radius: 10px; background: #0E7C7B; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font: 800 17px 'Baloo 2', sans-serif">{{d.p}}</span>
+<span style="font-weight: 700; font-size: 18px">{{d.name}}</span>
+<span style="font-size: 13px; color: #5B6B6A">{{d.room}} · {{d.count}} waiting</span>
+</div>
+<button style="height: 40px; padding: 0 12px; border: 1px solid #C9D3D2; border-radius: 10px; background: #FFFFFF; color: #142121; font: 600 13px Inter, sans-serif">Pause</button>
+</div>
+<div style="display: flex; gap: 12px">
+<div style="flex: 1 1 0; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #DCE3E2">
+<span style="font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 44px; line-height: 1; color: #0E7C7B">{{d.now}}</span>
+<div style="display: flex; flex-direction: column"><span style="font-weight: 600">{{d.nowName}}</span><span style="font-size: 13px; color: #5B6B6A">{{d.nowTime}} in room</span></div>
+</div>
+<button style="width: 240px; border: 0; border-radius: 16px; background: #0E7C7B; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 4px 0 #0A5958">
+<span style="font: 800 24px 'Baloo 2', sans-serif; display: flex; align-items: center; gap: 8px">Next patient <span class="kbd">{{d.key}}</span></span>
+<span style="font-size: 13px; opacity: .9">Calls {{d.next}}</span>
+</button>
+</div>
+<div style="flex: 1 1 auto; min-height: 0; border-radius: 16px; background: #FFFFFF; border: 1px solid #DCE3E2; overflow: hidden">
+<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 96px 90px 64px 136px; gap: 8px; padding: 10px 16px; font-size: 12px; font-weight: 600; color: #5B6B6A; border-bottom: 1px solid #DCE3E2">
+<span>Token</span><span>Patient</span><span>Type</span><span>Distance</span><span>Waited</span><span style="text-align: right">Actions</span>
+</div>
+<sc-for list="{{d.rows}}" as="r" hint-placeholder-count="7">
+<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 96px 90px 64px 136px; gap: 8px; align-items: center; padding: 6px 16px; border-bottom: 1px solid #EDF1F0; font-size: 14px; background: {{r.bg}}">
+<span style="font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 20px; color: {{r.tc}}">{{r.t}}</span>
+<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><strong style="font-weight: 600">{{r.n}}</strong> <span style="color: #5B6B6A; font-size: 12px">{{r.ph}}</span></span>
+<span style="font-size: 12px; font-weight: 600; color: {{r.typeFg}}">{{r.type}}</span>
+<span style="font-size: 12px">{{r.dist}}</span>
+<span style="font-weight: 600">{{r.w}}</span>
+<span style="display: flex; justify-content: flex-end">
+<button class="ib" aria-label="Priority"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg></button>
+<button class="ib" aria-label="Move back 2"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"></path></svg></button>
+<button class="ib" aria-label="More actions"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</span>
+</div>
+</sc-for>
+</div>
+</section>
+</sc-for>
+</div>
+
+<footer style="display: flex; gap: 20px; padding: 10px 24px; background: #FFFFFF; border-top: 1px solid #DCE3E2; font-size: 12px; color: #5B6B6A">
+<span>Keyboard: <strong>A</strong> next for Dr. Sharma · <strong>B</strong> next for Dr. Verma · <strong>W</strong> walk-in · <strong>/</strong> find · <strong>Ctrl Z</strong> undo</span>
+<span style="margin-left: auto">More actions: skip, no-show, remove, edit name</span>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+renderVals() {
+const b = { bg: '#FFFFFF', tc: '#142121' };
+const N = { type: 'New', typeFg: '#0A5958' }, F = { type: 'Follow-up', typeFg: '#33408F' };
+const docs = [
+{ p: 'A', name: 'Dr. Anita Sharma', room: 'Room 2', count: 9, now: 'A-18', nowName: 'Anil Choudhary', nowTime: '6:12', key: 'A', next: 'A-26 Baby Arjun (priority)', rows: [
+{ ...b, ...N, t: 'A-26', n: 'Baby Arjun', ph: '99280 •••12', dist: 'Here', w: '3 min', bg: '#FDF1EF', tc: '#B42318' },
+{ ...b, ...N, t: 'A-19', n: 'Ramesh Kumar', ph: '98281 •••34', dist: 'Here', w: '38 min', bg: '#FFFAF2' },
+{ ...b, ...F, t: 'A-20', n: 'Sunita Devi', ph: '94140 •••07', dist: 'Here', w: '34 min' },
+{ ...b, ...N, t: 'A-21', n: 'Mohd. Irfan', ph: '70140 •••88', dist: 'Under 15', w: '29 min' },
+{ ...b, ...F, t: 'A-22', n: 'Kavya Joshi', ph: '98870 •••51', dist: 'Here', w: '25 min' },
+{ ...b, ...F, t: 'A-23', n: 'Priya Meena', ph: '98290 •••45', dist: 'Under 15', w: '22 min' },
+{ ...b, ...N, t: 'A-24', n: 'Harish Saini', ph: '90010 •••63', dist: '15 to 30', w: '18 min' },
+{ ...b, ...N, t: 'A-25', n: 'Kamla Bai', ph: 'walk-in', dist: 'Here', w: '12 min' }
+] },
+{ p: 'B', name: 'Dr. Rohit Verma', room: 'Room 3', count: 5, now: 'B-07', nowName: 'Baby Ishita', nowTime: '4:40', key: 'B', next: 'B-08 Aarav Jain', rows: [
+{ ...b, ...F, t: 'B-08', n: 'Aarav Jain', ph: '98290 •••20', dist: 'Here', w: '21 min' },
+{ ...b, ...N, t: 'B-09', n: 'Myra Khan', ph: '78910 •••02', dist: 'Here', w: '17 min' },
+{ ...b, ...N, t: 'B-10', n: 'Vihaan Rao', ph: '99500 •••77', dist: 'Under 15', w: '11 min' },
+{ ...b, ...F, t: 'B-11', n: 'Anaya Gupta', ph: '94600 •••39', dist: '15 to 30', w: '6 min' },
+{ ...b, ...N, t: 'B-12', n: 'Kabir Singh', ph: '90240 •••58', dist: 'Here', w: '2 min' }
+] }
+];
+return { docs };
+}
+}
+</script>
+
+
+</body></html>

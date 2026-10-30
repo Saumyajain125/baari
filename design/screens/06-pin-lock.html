@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Reception PIN lock</title>
+<script src="ad7f5f8f-6dc8-4ce4-baf0-2a6895849c9c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0A5958}a:hover{color:#063F3E}
+.key{height:76px;border:0;border-radius:20px;background:#FFFFFF;color:#142121;font:700 30px 'Baloo 2',sans-serif;box-shadow:0 1px 0 #DCE3E2,0 2px 6px rgba(20,33,33,.06)}
+.who{display:flex;align-items:center;gap:12px;min-height:64px;padding:0 16px;border-radius:16px;border:1px solid #DCE3E2;background:#FFFFFF;color:#142121;font:600 16px Inter,sans-serif;text-align:left}
+.who[aria-pressed="true"]{border:2px solid #0E7C7B;background:#E6F2F1}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: #F4F6F5; color: #142121; font-family: Inter, 'Noto Sans Devanagari', system-ui, sans-serif; display: flex">
+
+<section style="flex: 1 1 0; display: flex; flex-direction: column; justify-content: space-between; padding: 56px; background: #0E7C7B; color: #FFFFFF">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg width="44" height="44" sc-camel-view-box="0 0 128 128" aria-hidden="true"><path d="M30,16 H98 A22,22 0 0 1 120,38 V52 A12,12 0 0 0 120,76 V90 A22,22 0 0 1 98,112 H30 A22,22 0 0 1 8,90 V76 A12,12 0 0 0 8,52 V38 A22,22 0 0 1 30,16 Z" fill="#FFFFFF"></path><circle cx="38" cy="64" r="6" fill="#0E7C7B" fill-opacity="0.45"></circle><circle cx="60" cy="64" r="6" fill="#0E7C7B" fill-opacity="0.72"></circle><circle cx="88" cy="64" r="13" fill="#0E7C7B"></circle></svg>
+<span style="font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 32px">baari</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 40px; line-height: 1.1">Sharma Family Clinic</span>
+<span style="font-size: 18px; opacity: .9">Reception · Thu, 29 Oct</span>
+<span style="margin-top: 12px; align-self: flex-start; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.16); font-size: 15px; font-weight: 600">Queue keeps running while locked</span>
+</div>
+<span style="font-size: 14px; opacity: .85">Locked automatically after 10 min idle so patients can't tap the screen.</span>
+</section>
+
+<section style="width: 520px; box-sizing: border-box; padding: 48px 56px; display: flex; flex-direction: column; gap: 22px">
+<h1 style="margin: 0; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 30px">Who's at the desk?</h1>
+<div role="group" aria-label="Staff" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button class="who" aria-pressed="true"><span style="width: 36px; height: 36px; border-radius: 50%; background: #0E7C7B; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font: 700 15px Inter, sans-serif">RK</span>Rekha</button>
+<button class="who" aria-pressed="false"><span style="width: 36px; height: 36px; border-radius: 50%; background: #E6F2F1; color: #0A5958; display: flex; align-items: center; justify-content: center; font: 700 15px Inter, sans-serif">SM</span>Suresh</button>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Enter your 4 digit PIN</span>
+<div aria-label="2 of 4 digits entered" style="display: flex; gap: 16px">
+<span style="width: 18px; height: 18px; border-radius: 50%; background: #0E7C7B"></span>
+<span style="width: 18px; height: 18px; border-radius: 50%; background: #0E7C7B"></span>
+<span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid #9AA6A5; box-sizing: border-box"></span>
+<span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid #9AA6A5; box-sizing: border-box"></span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+<button class="key">1</button><button class="key">2</button><button class="key">3</button>
+<button class="key">4</button><button class="key">5</button><button class="key">6</button>
+<button class="key">7</button><button class="key">8</button><button class="key">9</button>
+<button class="key" style="font: 600 15px Inter, sans-serif; background: transparent; box-shadow: none; color: #0A5958">Forgot?</button>
+<button class="key">0</button>
+<button class="key" aria-label="Delete" style="background: transparent; box-shadow: none; display: flex; align-items: center; justify-content: center"><svg width="28" height="28" sc-camel-view-box="0 0 24 24" fill="none" stroke="#142121" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5h11a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H9l-6-7z"></path><path d="M12 9l5 6M17 9l-5 6"></path></svg></button>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+
+
+</body></html>

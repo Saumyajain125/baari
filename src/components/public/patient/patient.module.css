@@ -1,0 +1,23 @@
+/* "It's your turn": a soft ring pulses out from the token a few times. */
+.turnPulse {
+  animation: patient-turn-pulse 1.6s ease-out 4;
+}
+
+@keyframes patient-turn-pulse {
+  0% {
+    box-shadow:
+      0 6px 0 var(--color-teal-dark),
+      0 0 0 0 rgb(14 124 123 / 0.45);
+  }
+  100% {
+    box-shadow:
+      0 6px 0 var(--color-teal-dark),
+      0 0 0 18px rgb(14 124 123 / 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turnPulse {
+    animation: none;
+  }
+}
