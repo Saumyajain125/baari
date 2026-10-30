@@ -4,13 +4,15 @@ export interface ClinicIdentityProps {
   clinicName: string;
   /** "Thu, 29 Oct · Morning session" */
   subtitle: string;
+  /** Extra classes for the logo, e.g. to hide it where the header is tight. */
+  logoClassName?: string;
 }
 
 /** Logo, clinic name and date/session line at the left of the reception header. */
-export function ClinicIdentity({ clinicName, subtitle }: ClinicIdentityProps) {
+export function ClinicIdentity({ clinicName, subtitle, logoClassName }: ClinicIdentityProps) {
   return (
     <div className="flex min-w-0 items-center gap-[10px]">
-      <span className="flex-none">
+      <span className={logoClassName ? `flex-none ${logoClassName}` : "flex-none"}>
         <LogoMark size={32} />
       </span>
       <div className="flex min-w-0 flex-col">

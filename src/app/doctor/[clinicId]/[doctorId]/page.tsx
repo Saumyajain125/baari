@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { ClinicLockGate } from "@/components/auth/ReceptionLockGate";
 import { DoctorApp } from "@/components/public/doctor/DoctorApp";
 import { decodeParam } from "@/components/public/ui";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "Doctor's button · baari",
-};
+export const metadata: Metadata = shareMetadata({
+  title: "Doctor's button",
+  description: "The doctor's own Next patient button and the patient with them.",
+});
 
 export default async function DoctorButtonPage({
   params,

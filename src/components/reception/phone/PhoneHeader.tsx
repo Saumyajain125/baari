@@ -1,4 +1,5 @@
 import { PauseIcon, PlayIcon } from "@/components/icons";
+import { ClinicIdentity } from "@/components/reception/ClinicIdentity";
 import { SettingsMenu } from "@/components/reception/tablet/SettingsMenu";
 import type { ClinicHeaderView } from "@/lib/view";
 
@@ -16,7 +17,7 @@ export interface PhoneHeaderProps {
 }
 
 /**
- * Clinic name, one-line stats, the pause / resume toggle for the selected
+ * Logo, clinic name, one-line stats, the pause / resume toggle for the selected
  * doctor, and the settings menu (lock, QR poster, TV display, settings).
  */
 export function PhoneHeader({
@@ -35,12 +36,12 @@ export function PhoneHeader({
 
   return (
     <header className="flex items-center justify-between gap-3 border-b border-line bg-surface px-4 py-[14px]">
-      <div className="flex min-w-0 flex-col">
-        <h1 className="truncate font-display text-[17px] font-bold">{header.clinicName}</h1>
-        <p className="truncate text-[12px] text-muted">
-          {`${stats.inQueue} waiting · ${stats.served} served · ${stats.avgConsult} avg`}
-        </p>
-      </div>
+      {/* Below 380px the logo would push "6 min avg" off the stats line. */}
+      <ClinicIdentity
+        clinicName={header.clinicName}
+        subtitle={`${stats.inQueue} waiting · ${stats.served} served · ${stats.avgConsult} avg`}
+        logoClassName="max-[379px]:hidden"
+      />
       <div className="flex shrink-0 items-center gap-2">
         {paused ? (
           <button

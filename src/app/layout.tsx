@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Baloo_2, Inter, Noto_Sans_Devanagari } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE } from "@/lib/share";
 import "./globals.css";
 
 const inter = Inter({
@@ -20,9 +21,14 @@ const devanagari = Noto_Sans_Devanagari({
   weight: ["400", "500", "600"],
 });
 
+// The icons (favicon.ico, icon.svg, apple-icon.png) and the Open Graph image
+// come from the file conventions in this folder; staff pages add the manifest.
 export const metadata: Metadata = {
-  title: "baari · Clinic queue",
-  description: "Walk-in queue for clinics: reception desk, TV display and patient updates.",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: { type: "website", siteName: SITE_NAME, locale: "en_IN", title: SITE_TITLE, description: SITE_DESCRIPTION },
+  twitter: { card: "summary_large_image", title: SITE_TITLE, description: SITE_DESCRIPTION },
 };
 
 export const viewport: Viewport = {

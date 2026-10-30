@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
+import { LogoMark } from "@/components/brand/Logo";
 import type { IssuedSlip } from "@/components/reception/handlers";
 import { cx } from "./controls";
 
@@ -49,6 +50,10 @@ export function TokenSlip({ slip, variant = "screen" }: TokenSlipProps) {
       </span>
       <span className="text-[11px]">Watch the TV screen for your number</span>
       <span className="text-[10px]">{slip.issuedAtText}</span>
+      <span className="mt-0.5 flex items-center gap-1 text-[10px] font-bold">
+        <LogoMark variant="print" size={14} />
+        baari
+      </span>
     </div>
   );
 }
