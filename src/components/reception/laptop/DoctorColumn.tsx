@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { PlayIcon } from "@/components/icons";
+import { PlayIcon, QrIcon, TvIcon } from "@/components/icons";
 import type { ReceptionHandlers } from "@/components/reception/handlers";
 import type { DoctorQueueView, QueueRowView } from "@/lib/view";
 import { Kbd } from "./Kbd";
@@ -114,7 +114,7 @@ export function DoctorColumn({
         />
       </div>
 
-      <QueueTable doctorName={doctor.name} rows={rows} empty={emptyState(queue, query)} actions={actions} />
+      <QueueTable doctorName={doctor.name} rows={rows} empty={emptyState(queue, query, handlers)} actions={actions} />
     </section>
   );
 }
@@ -213,20 +213,27 @@ function pausedLabel(queue: DoctorQueueView): string {
   return `Paused · ${p.reason}${p.backAtLabel ? ` · back ${p.backAtLabel}` : ""}`;
 }
 
-function emptyState(queue: DoctorQueueView, query: string): QueueEmptyState {
+function emptyState(queue: DoctorQueueView, query: string, handlers: ReceptionHandlers): QueueEmptyState {
   if (queue.rows.length > 0 && query.trim()) {
     return { title: `No match for “${query.trim()}”`, body: "Try a token like A-26, part of a name, or phone digits." };
   }
+  // Before anyone joins, offer what the tablet's start-of-day screen does (artboard 03).
+  const setUp = [
+    { label: "Print QR poster", icon: <QrIcon size={18} />, onClick: handlers.onPrintPoster },
+    { label: "Open TV display", icon: <TvIcon size={18} />, onClick: handlers.onOpenTv },
+  ];
   if (queue.doctor.startsAtLabel) {
     return {
       title: queue.doctor.startsAtLabel,
       body: "Patients can already join. They show up here as they scan the QR poster or you add them.",
+      actions: queue.lastToken === 0 ? setUp : undefined,
     };
   }
   if (queue.lastToken === 0) {
     return {
       title: "Fresh queue for today",
       body: "Patients who scan the QR poster show up here on their own. Yesterday's queue was cleared at midnight.",
+      actions: setUp,
     };
   }
   return {

@@ -1,8 +1,9 @@
 "use client";
 
 import type { RefObject } from "react";
-import { PlusIcon, SearchIcon } from "@/components/icons";
+import { PlusIcon, SearchIcon, TvIcon } from "@/components/icons";
 import { LogoMark } from "@/components/brand/Logo";
+import { SettingsMenu } from "@/components/reception/tablet/SettingsMenu";
 import type { ClinicHeaderView } from "@/lib/view";
 import { Kbd } from "./Kbd";
 import { WALK_IN_KEY } from "./useLaptopShortcuts";
@@ -13,10 +14,28 @@ export interface LaptopHeaderProps {
   onQueryChange(query: string): void;
   searchRef: RefObject<HTMLInputElement | null>;
   onAddWalkIn(): void;
+  onOpenTv(): void;
+  onLock(): void;
+  onPrintPoster(): void;
+  onOpenSettings(): void;
 }
 
-/** 68px bar: identity, inline day stats, the find box and "Add walk-in [W]". */
-export function LaptopHeader({ header, query, onQueryChange, searchRef, onAddWalkIn }: LaptopHeaderProps) {
+/**
+ * 68px bar: identity, inline day stats, the find box, "Add walk-in [W]", then
+ * the TV and settings buttons. Artboard 05 omits the last two, but without
+ * them a laptop desk can't open the TV display, print the poster or lock.
+ */
+export function LaptopHeader({
+  header,
+  query,
+  onQueryChange,
+  searchRef,
+  onAddWalkIn,
+  onOpenTv,
+  onLock,
+  onPrintPoster,
+  onOpenSettings,
+}: LaptopHeaderProps) {
   const { stats } = header;
 
   return (
@@ -78,6 +97,18 @@ export function LaptopHeader({ header, query, onQueryChange, searchRef, onAddWal
         Add walk-in
         <Kbd>{WALK_IN_KEY}</Kbd>
       </button>
+
+      <div className="-ml-2 flex flex-none items-center gap-2">
+        <button
+          type="button"
+          aria-label="Open TV display"
+          onClick={onOpenTv}
+          className="flex size-11 items-center justify-center rounded-[12px] border border-line bg-surface text-ink hover:bg-hover"
+        >
+          <TvIcon size={20} />
+        </button>
+        <SettingsMenu compact onLock={onLock} onPrintPoster={onPrintPoster} onOpenSettings={onOpenSettings} />
+      </div>
     </header>
   );
 }

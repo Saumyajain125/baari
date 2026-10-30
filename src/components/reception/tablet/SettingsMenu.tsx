@@ -1,12 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import { QrIcon, SettingsIcon } from "@/components/icons";
+import { QrIcon, SettingsIcon, TvIcon } from "@/components/icons";
 
 export interface SettingsMenuProps {
   onLock(): void;
   onPrintPoster(): void;
   onOpenSettings(): void;
+  /** Adds "Open TV display", for layouts without their own TV button. */
+  onOpenTv?(): void;
+  /** 44px trigger for the laptop and phone headers (tablet's is 48px). */
+  compact?: boolean;
 }
 
 interface MenuItem {
@@ -21,7 +25,7 @@ interface MenuItem {
  * away, following the WAI-ARIA menu button pattern: arrows / Home / End move
  * focus, Esc returns focus to the button, Tab or a click outside closes it.
  */
-export function SettingsMenu({ onLock, onPrintPoster, onOpenSettings }: SettingsMenuProps) {
+export function SettingsMenu({ onLock, onPrintPoster, onOpenSettings, onOpenTv, compact = false }: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -30,6 +34,7 @@ export function SettingsMenu({ onLock, onPrintPoster, onOpenSettings }: Settings
   const items: MenuItem[] = [
     { key: "lock", label: "Lock desk", icon: <LockIcon />, run: onLock },
     { key: "poster", label: "Print QR poster", icon: <QrIcon size={20} />, run: onPrintPoster },
+    ...(onOpenTv ? [{ key: "tv", label: "Open TV display", icon: <TvIcon size={20} />, run: onOpenTv }] : []),
     { key: "settings", label: "Clinic settings", icon: <SettingsIcon size={20} />, run: onOpenSettings },
   ];
 
@@ -98,9 +103,11 @@ export function SettingsMenu({ onLock, onPrintPoster, onOpenSettings }: Settings
         aria-controls={open ? menuId : undefined}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={onTriggerKeyDown}
-        className="flex size-12 items-center justify-center rounded-[14px] border border-line bg-surface text-ink hover:bg-hover"
+        className={`flex items-center justify-center border border-line bg-surface text-ink hover:bg-hover ${
+          compact ? "size-11 rounded-[12px]" : "size-12 rounded-[14px]"
+        }`}
       >
-        <SettingsIcon size={22} />
+        <SettingsIcon size={compact ? 20 : 22} />
       </button>
       {open && (
         <div

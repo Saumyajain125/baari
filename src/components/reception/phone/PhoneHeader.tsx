@@ -1,4 +1,5 @@
 import { PauseIcon, PlayIcon } from "@/components/icons";
+import { SettingsMenu } from "@/components/reception/tablet/SettingsMenu";
 import type { ClinicHeaderView } from "@/lib/view";
 
 export interface PhoneHeaderProps {
@@ -8,10 +9,27 @@ export interface PhoneHeaderProps {
   doctorName?: string;
   onPause(): void;
   onResume(): void;
+  onOpenTv(): void;
+  onLock(): void;
+  onPrintPoster(): void;
+  onOpenSettings(): void;
 }
 
-/** Clinic name, one-line stats and the pause / resume toggle for the selected doctor. */
-export function PhoneHeader({ header, paused, doctorName, onPause, onResume }: PhoneHeaderProps) {
+/**
+ * Clinic name, one-line stats, the pause / resume toggle for the selected
+ * doctor, and the settings menu (lock, QR poster, TV display, settings).
+ */
+export function PhoneHeader({
+  header,
+  paused,
+  doctorName,
+  onPause,
+  onResume,
+  onOpenTv,
+  onLock,
+  onPrintPoster,
+  onOpenSettings,
+}: PhoneHeaderProps) {
   const { stats } = header;
   const whose = doctorName ? ` for ${doctorName}` : "";
 
@@ -23,25 +41,34 @@ export function PhoneHeader({ header, paused, doctorName, onPause, onResume }: P
           {`${stats.inQueue} waiting · ${stats.served} served · ${stats.avgConsult} avg`}
         </p>
       </div>
-      {paused ? (
-        <button
-          type="button"
-          aria-label={`Resume queue${whose}`}
-          onClick={onResume}
-          className="flex size-11 shrink-0 items-center justify-center rounded-[12px] border border-teal bg-teal text-white active:bg-teal-dark"
-        >
-          <PlayIcon size={18} />
-        </button>
-      ) : (
-        <button
-          type="button"
-          aria-label={`Pause queue${whose}`}
-          onClick={onPause}
-          className="flex size-11 shrink-0 items-center justify-center rounded-[12px] border border-line bg-surface text-ink hover:bg-hover"
-        >
-          <PauseIcon size={18} />
-        </button>
-      )}
+      <div className="flex shrink-0 items-center gap-2">
+        {paused ? (
+          <button
+            type="button"
+            aria-label={`Resume queue${whose}`}
+            onClick={onResume}
+            className="flex size-11 shrink-0 items-center justify-center rounded-[12px] border border-teal bg-teal text-white active:bg-teal-dark"
+          >
+            <PlayIcon size={18} />
+          </button>
+        ) : (
+          <button
+            type="button"
+            aria-label={`Pause queue${whose}`}
+            onClick={onPause}
+            className="flex size-11 shrink-0 items-center justify-center rounded-[12px] border border-line bg-surface text-ink hover:bg-hover"
+          >
+            <PauseIcon size={18} />
+          </button>
+        )}
+        <SettingsMenu
+          compact
+          onLock={onLock}
+          onPrintPoster={onPrintPoster}
+          onOpenTv={onOpenTv}
+          onOpenSettings={onOpenSettings}
+        />
+      </div>
     </header>
   );
 }

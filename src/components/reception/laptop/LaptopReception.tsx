@@ -91,6 +91,10 @@ export function LaptopReception({ header, queues, offline, handlers }: LaptopRec
         onQueryChange={setQuery}
         searchRef={searchRef}
         onAddWalkIn={() => handlers.onAddWalkIn()}
+        onOpenTv={handlers.onOpenTv}
+        onLock={handlers.onLock}
+        onPrintPoster={handlers.onPrintPoster}
+        onOpenSettings={handlers.onOpenSettings}
       />
 
       <main

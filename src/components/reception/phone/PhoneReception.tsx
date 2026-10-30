@@ -140,6 +140,10 @@ export function PhoneReception({
         doctorName={multiDoctor ? queue.doctor.name : undefined}
         onPause={() => handlers.onPause(doctorId)}
         onResume={() => handlers.onResume(doctorId)}
+        onOpenTv={handlers.onOpenTv}
+        onLock={handlers.onLock}
+        onPrintPoster={handlers.onPrintPoster}
+        onOpenSettings={handlers.onOpenSettings}
       />
 
       {multiDoctor && (

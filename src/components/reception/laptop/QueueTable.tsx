@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { ArrowDownIcon, PriorityIcon } from "@/components/icons";
 import { LogoMark } from "@/components/brand/Logo";
 import type { QueueRowView } from "@/lib/view";
@@ -43,7 +44,12 @@ export interface RowActions {
   onEditName(row: QueueRowView, trigger: HTMLButtonElement): void;
 }
 
-export type QueueEmptyState = { title: string; body: string };
+export type QueueEmptyState = {
+  title: string;
+  body: string;
+  /** Buttons under the copy, e.g. Print QR poster / Open TV display before the first patient. */
+  actions?: { label: string; icon: ReactNode; onClick(): void }[];
+};
 
 export function QueueTable({
   doctorName,
@@ -156,7 +162,7 @@ function QueueRow({ row, actions }: { row: QueueRowView; actions: RowActions }) 
   );
 }
 
-function EmptyRows({ title, body }: QueueEmptyState) {
+function EmptyRows({ title, body, actions }: QueueEmptyState) {
   return (
     <div role="rowgroup" className="flex flex-auto">
       <div role="row" className="flex flex-auto">
@@ -170,6 +176,21 @@ function EmptyRows({ title, body }: QueueEmptyState) {
             <p className="m-0 font-display text-[20px] font-bold leading-[1.3]">{title}</p>
             <p className="m-0 text-[14px] leading-[1.5] text-muted">{body}</p>
           </div>
+          {actions && actions.length > 0 && (
+            <div className="mt-1 flex flex-wrap justify-center gap-2.5">
+              {actions.map((a) => (
+                <button
+                  key={a.label}
+                  type="button"
+                  onClick={a.onClick}
+                  className="flex h-11 items-center gap-2 rounded-[12px] border border-line-strong bg-surface px-4 text-[14px] font-semibold text-ink hover:bg-hover"
+                >
+                  {a.icon}
+                  {a.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
