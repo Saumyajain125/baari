@@ -114,6 +114,16 @@ speak plain HTTP, so on other devices:
 
 ## Using a real Firebase project
 
+The live project is **`baari-queue`** (alias `prod` in `.firebaserc`; Firestore in
+`asia-south1` Mumbai). The default project stays `demo-baari` so the emulators never
+touch it. Redeploy rules and indexes with:
+
+```bash
+npx firebase deploy --only firestore --project prod
+```
+
+To set up a different project from scratch:
+
 1. Create a project at https://console.firebase.google.com.
 2. **Authentication > Sign-in method**: enable **Email/Password** and **Anonymous**.
 3. **Firestore Database > Create database** in production mode, in a region near the

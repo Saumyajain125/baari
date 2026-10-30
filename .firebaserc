@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "demo-baari"
+    "default": "demo-baari",
+    "prod": "baari-queue"
   }
 }
