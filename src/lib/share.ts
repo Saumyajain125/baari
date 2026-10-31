@@ -20,7 +20,7 @@ export interface ShareText {
 
 /**
  * Home-screen install for the clinic's own devices (public/manifest.webmanifest).
- * Only staff pages link the manifest: its start_url is "/", which would land a
+ * Only staff pages link the manifest: its start_url is "/app", which would land a
  * patient who installed their token page on the staff sign-in screen.
  */
 export const staffAppMetadata: Metadata = {

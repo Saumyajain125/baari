@@ -83,6 +83,36 @@
   }
 }
 
+/*
+ * Landing page entrance: hero copy and the hero scene's devices rise into
+ * place in CSS, so they animate before hydration and never hold back the
+ * first paint. Stagger with style={{ "--d": "120ms" }}.
+ */
+@keyframes land-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .land-rise {
+    animation: land-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+}
+
+/* In-page links (#how, #cost) glide instead of jumping. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(#main) {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Elements marked .print-only appear on paper only; .no-print never does. */
 .print-only {
   display: none;

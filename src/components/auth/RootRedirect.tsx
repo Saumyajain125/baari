@@ -4,7 +4,7 @@ import { AccountProblem, Redirect, ResolveAccount } from "./account";
 import { AuthLoading } from "./AuthStatus";
 import { FirebaseNotConfigured } from "./FirebaseNotConfigured";
 
-/** "/": sends each device where it belongs: the desk, first-run setup, or sign in. */
+/** "/app": sends each device where it belongs: the desk, first-run setup, or sign in. */
 export function RootRedirect() {
   return (
     <ResolveAccount>

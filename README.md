@@ -150,7 +150,8 @@ project (see [docs/FIREBASE.md](docs/FIREBASE.md#security-notes)).
 
 | Route | For | What it does |
 |-------|-----|--------------|
-| `/` | everyone | Sends you to sign-in, setup or reception |
+| `/` | everyone | Landing page for doctors and clinic owners (what baari is, cost, how it works, FAQ) |
+| `/app` | clinic | Sends you to sign-in, setup or reception; the installed app's `start_url` |
 | `/login` | clinic | Sign in or create the clinic account (email + password) |
 | `/setup` | clinic | First run: clinic name, doctors (letter, room, start time), staff with PINs |
 | `/settings` | clinic | Edit the clinic, doctors and staff (including PIN resets) |

@@ -1,10 +1,6 @@
-import type { Metadata } from "next";
-import { RootRedirect } from "@/components/auth/RootRedirect";
-import { staffAppMetadata } from "@/lib/share";
+import { LandingPage } from "@/components/landing/LandingPage";
 
-// The manifest's start_url: an installed reception app opens here.
-export const metadata: Metadata = staffAppMetadata;
-
+// Title, description and the Open Graph card come from the root layout.
 export default function Home() {
-  return <RootRedirect />;
+  return <LandingPage />;
 }
