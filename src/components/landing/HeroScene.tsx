@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowRightIcon, BellIcon, ClockIcon } from "@phosphor-icons/react";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useInView } from "motion/react";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 import { useEffect, useRef, useState } from "react";
 import { LogoMark } from "@/components/brand/Logo";
 import { cx } from "@/components/public/ui";
@@ -36,7 +37,7 @@ const token = (n: number) => `A-${n}`;
 export function HeroScene() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.3 });
-  const reduce = useReducedMotion() ?? false;
+  const reduce = usePrefersReducedMotion();
   const running = inView && !reduce;
   const [step, setStep] = useState(0);
   const [pressing, setPressing] = useState(false);
@@ -105,7 +106,7 @@ function Mark({ className, variant }: { className: string; variant?: "brand" | "
 function Tv({ serving, step, still }: { serving: number; step: number; still: boolean }) {
   const next = [1, 2, 3, 4].map((i) => serving + i).filter((n) => n <= LAST_TOKEN);
   return (
-    <div className="land-rise absolute top-[2%] left-[1%] w-[69%]" style={{ "--d": "180ms" } as React.CSSProperties}>
+    <div className="land-rise absolute top-[2%] left-[1%] w-[69%] [translate:calc(var(--px,0)*-7px)_calc(var(--py,0)*-5px)]" style={{ "--d": "180ms" } as React.CSSProperties}>
       <div className="rounded-[2.2cqw] bg-teal-ink p-[0.9cqw] shadow-[0_3cqw_6cqw_-2.5cqw_rgb(14_23_23/0.45)]">
         <div className="flex aspect-[16/10] flex-col gap-[1.3cqw] overflow-hidden rounded-[1.3cqw] bg-canvas p-[1.7cqw]">
           <div className="flex items-center gap-[1.1cqw]">
@@ -209,7 +210,7 @@ function Tv({ serving, step, still }: { serving: number; step: number; still: bo
 function DoctorRoom({ serving, pressed }: { serving: number; pressed: boolean }) {
   return (
     <div
-      className="land-rise absolute top-[67%] left-[3%] w-[47%] rounded-[2.4cqw] border border-line bg-surface p-[1.7cqw] shadow-[0_2.5cqw_5cqw_-2.5cqw_rgb(20_33_33/0.3)]"
+      className="land-rise absolute top-[67%] left-[3%] w-[47%] [translate:calc(var(--px,0)*14px)_calc(var(--py,0)*10px)] rounded-[2.4cqw] border border-line bg-surface p-[1.7cqw] shadow-[0_2.5cqw_5cqw_-2.5cqw_rgb(20_33_33/0.3)]"
       style={{ "--d": "520ms" } as React.CSSProperties}
     >
       <div className="mb-[1.3cqw] flex items-center justify-between gap-[1cqw]">
@@ -260,7 +261,7 @@ function Phone({ serving }: { serving: number }) {
   const ahead = PATIENT - serving - 1;
   return (
     <div
-      className="land-rise absolute top-[11%] left-[68%] w-[30%]"
+      className="land-rise absolute top-[11%] left-[68%] w-[30%] [translate:calc(var(--px,0)*24px)_calc(var(--py,0)*18px)]"
       style={{ "--d": "380ms" } as React.CSSProperties}
     >
       <div className="rounded-[4.6cqw] bg-teal-ink p-[0.75cqw] shadow-[0_3cqw_6cqw_-2cqw_rgb(14_23_23/0.5)]">

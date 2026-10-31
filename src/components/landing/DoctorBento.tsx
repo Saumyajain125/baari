@@ -1,10 +1,12 @@
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { CountUp, DoctorButtonDemo, RisingPhone } from "./DoctorDemos";
+import { ClipReveal } from "./ClipReveal";
 import { Reveal } from "./Reveal";
 import { Container, SectionLead, SectionTitle } from "./shared";
+import { Spotlight } from "./Spotlight";
 
-const card = "relative flex flex-col overflow-hidden rounded-[28px]";
+const card = "relative isolate flex flex-col overflow-hidden rounded-[28px]";
 const cardTitle = "font-display text-[1.6rem] leading-[1.12] font-bold text-balance md:text-[1.75rem]";
 const cardBody = "mt-3 max-w-[46ch] text-[16px] leading-relaxed text-pretty";
 
@@ -36,6 +38,7 @@ export function DoctorBento() {
         <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-12">
           {/* A: the door stays quiet */}
           <Reveal className={`${card} bg-teal-tint p-7 md:col-span-2 md:p-9 lg:col-span-5 lg:row-span-2`}>
+            <Spotlight />
             <h3 className={`${cardTitle} text-teal-darker`}>No more &ldquo;kitna time lagega?&rdquo; at your door</h3>
             <p className={`${cardBody} text-teal-dark`}>
               Every patient sees their place in line and the approx wait on their own phone, so they stop asking you.
@@ -53,24 +56,28 @@ export function DoctorBento() {
 
           {/* B: the TV */}
           <Reveal delay={0.08} className={`${card} border border-line bg-surface p-7 md:col-span-2 md:p-9 lg:col-span-7`}>
+            <Spotlight />
             <h3 className={cardTitle}>Your name and room on the waiting-room TV</h3>
             <p className={`${cardBody} text-muted`}>
               Big tokens anyone can read from the back row, with a flash and an optional chime when a number is called.
             </p>
-            <div className="mt-8 rounded-[18px] bg-teal-ink p-2 shadow-[0_30px_60px_-30px_rgb(14_23_23/0.5)]">
-              <Image
-                src="/landing/tv.webp"
-                alt="The waiting-room TV calling A-18 for Dr. Anita Sharma in Room 2 and B-07 for Dr. Rohit Verma in Room 3, with the next five tokens for each"
-                width={1920}
-                height={1080}
-                sizes="(min-width: 1024px) 640px, 90vw"
-                className="block h-auto w-full rounded-[11px]"
-              />
-            </div>
+            <ClipReveal radius={18} className="mt-8">
+              <div className="rounded-[18px] bg-teal-ink p-2 shadow-[0_30px_60px_-30px_rgb(14_23_23/0.5)]">
+                <Image
+                  src="/landing/tv.webp"
+                  alt="The waiting-room TV calling A-18 for Dr. Anita Sharma in Room 2 and B-07 for Dr. Rohit Verma in Room 3, with the next five tokens for each"
+                  width={1920}
+                  height={1080}
+                  sizes="(min-width: 1024px) 640px, 90vw"
+                  className="block h-auto w-full rounded-[11px]"
+                />
+              </div>
+            </ClipReveal>
           </Reveal>
 
           {/* C: the doctor's own button */}
           <Reveal delay={0.12} className={`${card} border border-line bg-surface p-7 lg:col-span-4`}>
+            <Spotlight />
             <h3 className={cardTitle}>Call the next patient from your chair</h3>
             <p className={`${cardBody} mb-6 text-muted`}>A spare phone in your room becomes a big Next button. No bell, no shouting names.</p>
             <div className="mt-auto">
@@ -80,6 +87,7 @@ export function DoctorBento() {
 
           {/* D: numbers */}
           <Reveal delay={0.16} className={`${card} bg-teal-ink p-7 text-white lg:col-span-3`}>
+            <Spotlight tone="dark" />
             <h3 className={`${cardTitle} text-white`}>Every consult timed for you</h3>
             <dl className="mt-7 flex flex-col gap-5">
               {STATS.map((st) => (
@@ -101,6 +109,7 @@ export function DoctorBento() {
           <Reveal
             className={`${card} border border-line bg-surface p-7 md:col-span-2 md:p-9 lg:col-span-12 lg:flex-row lg:items-center lg:gap-12`}
           >
+            <Spotlight />
             <div className="lg:w-[38%]">
               <h3 className={cardTitle}>Names stay off the screen</h3>
               <p className={`${cardBody} text-muted`}>

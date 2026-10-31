@@ -6,8 +6,11 @@ import { Faq } from "./Faq";
 import { FinalCta } from "./FinalCta";
 import { Hero } from "./Hero";
 import { HowItWorks } from "./HowItWorks";
+import { Insights } from "./Insights";
 import { LandingMotion } from "./LandingMotion";
 import { Nav } from "./Nav";
+import { Pricing } from "./Pricing";
+import { Statement } from "./Statement";
 
 /**
  * Before this page existed, "/" was the installed staff app's start_url.
@@ -31,10 +34,13 @@ export function LandingPage() {
       <main id="main">
         <Hero />
         <DeviceStrip />
+        <Statement />
         <DoctorBento />
         <HowItWorks />
-        <CostCompare />
+        <Insights />
         <DeskShowcase />
+        <CostCompare />
+        <Pricing />
         <Faq />
       </main>
       <FinalCta />

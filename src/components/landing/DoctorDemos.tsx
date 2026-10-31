@@ -8,10 +8,10 @@ import {
   motion,
   useInView,
   useMotionValue,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 import { useEffect, useRef, useState } from "react";
 import { cx } from "@/components/public/ui";
 import { EASE_OUT } from "./Reveal";
@@ -57,7 +57,7 @@ const LAST = 27;
 export function DoctorButtonDemo() {
   const [serving, setServing] = useState(FIRST);
   const [tried, setTried] = useState(false);
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const waiting = LAST - serving;
 
   function next() {
@@ -120,13 +120,26 @@ export function DoctorButtonDemo() {
   );
 }
 
-/** A figure from the sample day that counts up once when it scrolls into view. */
-export function CountUp({ to, decimals = 0, className }: { to: number; decimals?: number; className?: string }) {
+/**
+ * A figure that counts up when it first scrolls into view, and glides to its
+ * new value whenever `to` changes after that.
+ */
+export function CountUp({
+  to,
+  decimals = 0,
+  format,
+  className,
+}: {
+  to: number;
+  decimals?: number;
+  format?: (v: number) => string;
+  className?: string;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const value = useMotionValue(0);
-  const text = useTransform(value, (v) => v.toFixed(decimals));
+  const text = useTransform(value, (v) => (format ? format(v) : v.toFixed(decimals)));
 
   useEffect(() => {
     if (!inView) return;

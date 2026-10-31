@@ -1,21 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { LogoMark } from "@/components/brand/Logo";
 import { OPEN_APP_HREF, PrimaryCta } from "./shared";
 
 const LINKS = [
   { href: "#doctors", label: "For doctors" },
   { href: "#how", label: "How it works" },
-  { href: "#cost", label: "Cost" },
+  { href: "#insights", label: "Insights" },
+  { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },
 ];
 
 /** Sticky top bar; its hairline and frosted backdrop fade in once the page scrolls. */
 export function Nav() {
-  const { scrollY } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
   const chrome = useTransform(scrollY, [0, 48], [0, 1]);
+  const progress = useSpring(scrollYProgress, { stiffness: 260, damping: 40, restDelta: 0.001 });
 
   return (
     <header className="sticky top-0 z-40">
@@ -23,6 +25,12 @@ export function Nav() {
         aria-hidden="true"
         style={{ opacity: chrome }}
         className="absolute inset-0 border-b border-line bg-canvas/85 backdrop-blur-md"
+      />
+      {/* Reading progress: a hairline of teal that fills as the page scrolls. */}
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: progress, opacity: chrome }}
+        className="absolute right-0 bottom-0 left-0 h-[2px] origin-left bg-teal"
       />
       <nav
         aria-label="Main"

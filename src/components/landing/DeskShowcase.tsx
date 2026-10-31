@@ -6,6 +6,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { useId, useState } from "react";
 import { cx } from "@/components/public/ui";
+import { ClipReveal } from "./ClipReveal";
 import { EASE_OUT, Reveal } from "./Reveal";
 import { Container, SectionLead, SectionTitle } from "./shared";
 
@@ -105,47 +106,49 @@ export function DeskShowcase() {
             })}
           </div>
 
-          <div
-            id={`${base}-panel`}
-            role="tabpanel"
-            aria-labelledby={`${base}-tab-${active}`}
-            className="relative mt-6 aspect-[4/5] overflow-hidden rounded-[28px] bg-teal-tint sm:aspect-[16/10]"
-          >
-            <AnimatePresence mode="popLayout" initial={false}>
-              <motion.div
-                key={screen.id}
-                className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 lg:p-12"
-                initial={{ opacity: 0, y: 40, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -24, scale: 0.98 }}
-                transition={{ duration: 0.55, ease: EASE_OUT }}
-              >
-                {screen.id === "phone" ? (
-                  <div className="h-full rounded-[40px] bg-teal-ink p-[8px] shadow-[0_40px_80px_-30px_rgb(14_23_23/0.55)]">
-                    <Image
-                      src={screen.src}
-                      alt={screen.alt}
-                      width={screen.width}
-                      height={screen.height}
-                      sizes="320px"
-                      className="block h-full w-auto rounded-[32px]"
-                    />
-                  </div>
-                ) : (
-                  <div className="max-h-full overflow-hidden rounded-[16px] border border-line bg-surface shadow-[0_40px_80px_-40px_rgb(14_23_23/0.5)]">
-                    <Image
-                      src={screen.src}
-                      alt={screen.alt}
-                      width={screen.width}
-                      height={screen.height}
-                      sizes="(min-width: 1200px) 1080px, 92vw"
-                      className="block h-auto max-h-full w-full object-contain"
-                    />
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <ClipReveal className="mt-6">
+            <div
+              id={`${base}-panel`}
+              role="tabpanel"
+              aria-labelledby={`${base}-tab-${active}`}
+              className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-teal-tint sm:aspect-[16/10]"
+            >
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div
+                  key={screen.id}
+                  className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 lg:p-12"
+                  initial={{ opacity: 0, y: 40, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -24, scale: 0.98 }}
+                  transition={{ duration: 0.55, ease: EASE_OUT }}
+                >
+                  {screen.id === "phone" ? (
+                    <div className="h-full rounded-[40px] bg-teal-ink p-[8px] shadow-[0_40px_80px_-30px_rgb(14_23_23/0.55)]">
+                      <Image
+                        src={screen.src}
+                        alt={screen.alt}
+                        width={screen.width}
+                        height={screen.height}
+                        sizes="320px"
+                        className="block h-full w-auto rounded-[32px]"
+                      />
+                    </div>
+                  ) : (
+                    <div className="max-h-full overflow-hidden rounded-[16px] border border-line bg-surface shadow-[0_40px_80px_-40px_rgb(14_23_23/0.5)]">
+                      <Image
+                        src={screen.src}
+                        alt={screen.alt}
+                        width={screen.width}
+                        height={screen.height}
+                        sizes="(min-width: 1200px) 1080px, 92vw"
+                        className="block h-auto max-h-full w-full object-contain"
+                      />
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </ClipReveal>
         </Reveal>
 
         <div className="mt-14 grid gap-10 md:grid-cols-2 md:gap-16">

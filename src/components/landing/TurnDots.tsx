@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 import { DOTS } from "@/components/brand/Logo";
 
 /**
@@ -8,7 +9,7 @@ import { DOTS } from "@/components/brand/Logo";
  * (बारी), the idea the mark is built on. Holds still under reduced motion.
  */
 export function TurnDots({ className }: { className?: string }) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   return (
     <svg viewBox="20 40 90 48" className={className} overflow="visible" aria-hidden="true">
       {DOTS.map(([cx, cy, r], i) => (

@@ -120,7 +120,7 @@ export function HowItWorks() {
       <Container>
         <Reveal>
           <SectionTitle id="how-title" className="max-w-[18ch]">
-            From the poster on your wall to &ldquo;it&apos;s your turn&rdquo;
+            {"From the poster on your wall to “it's your turn”"}
           </SectionTitle>
         </Reveal>
 

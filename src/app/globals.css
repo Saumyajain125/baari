@@ -99,11 +99,101 @@
   }
 }
 
+/* Hero headline: each line rises from behind its own mask. */
+@keyframes land-line {
+  from {
+    transform: translateY(108%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Slow ambient drift for the hero's background glows. */
+@keyframes land-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-6%, 5%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(4%, -4%, 0) scale(0.96);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .land-rise {
     animation: land-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: var(--d, 0ms);
   }
+  .land-line {
+    animation: land-line 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+  .land-drift {
+    animation: land-drift var(--t, 22s) ease-in-out infinite alternate;
+  }
+}
+
+/* Pricing slider: teal fill up to the thumb (--fill), on the dark calculator panel. */
+.land-range {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 30px;
+  background: transparent;
+  cursor: pointer;
+}
+.land-range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-teal-bright) var(--fill, 0%),
+    rgb(255 255 255 / 0.16) var(--fill, 0%)
+  );
+}
+.land-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px;
+  height: 26px;
+  margin-top: -9px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 6px rgb(63 184 182 / 0.25),
+    0 4px 12px rgb(0 0 0 / 0.35);
+  transition: box-shadow 0.2s ease;
+}
+.land-range:active::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 11px rgb(63 184 182 / 0.3),
+    0 4px 12px rgb(0 0 0 / 0.35);
+}
+.land-range::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.16);
+}
+.land-range::-moz-range-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-teal-bright);
+}
+.land-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 6px rgb(63 184 182 / 0.25),
+    0 4px 12px rgb(0 0 0 / 0.35);
+}
+.land-range:focus-visible {
+  outline: 2px solid var(--color-teal-bright);
+  outline-offset: 6px;
+  border-radius: 999px;
 }
 
 /* In-page links (#how, #cost) glide instead of jumping. */

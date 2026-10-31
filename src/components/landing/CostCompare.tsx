@@ -28,8 +28,8 @@ export function CostCompare() {
       <Container>
         <Reveal className="flex flex-col gap-5">
           <p className="text-[13px] font-bold tracking-[0.12em] text-teal-dark uppercase">Lower running cost</p>
-          <SectionTitle id="cost-title">
-            <span className="text-teal">₹0</span> in new hardware.
+          <SectionTitle id="cost-title" accent={["₹0"]}>
+            ₹0 in new hardware.
           </SectionTitle>
           <SectionLead>
             baari opens in the browser on the phones, tablet, laptop and TV your clinic already has. Nothing to fit, wire or

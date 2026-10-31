@@ -59,19 +59,7 @@ export function SecondaryCta({ href, children, className }: { href: string; chil
   );
 }
 
-export function SectionTitle({ children, className, id }: { children: ReactNode; className?: string; id?: string }) {
-  return (
-    <h2
-      id={id}
-      className={cx(
-        "font-display text-[2.15rem] leading-[1.08] font-bold tracking-[-0.01em] text-balance text-ink md:text-[2.9rem]",
-        className,
-      )}
-    >
-      {children}
-    </h2>
-  );
-}
+export { SectionTitle } from "./SectionTitle";
 
 export function SectionLead({ children, className }: { children: ReactNode; className?: string }) {
   return <p className={cx("max-w-[60ch] text-[17px] leading-relaxed text-pretty text-muted md:text-[18px]", className)}>{children}</p>;

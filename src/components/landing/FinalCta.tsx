@@ -1,29 +1,41 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/brand/Logo";
+import { Magnetic } from "./Magnetic";
 import { Reveal } from "./Reveal";
-import { Container, OPEN_APP_HREF, PrimaryCta } from "./shared";
+import { Container, OPEN_APP_HREF, PrimaryCta, SectionTitle } from "./shared";
+import { Spotlight } from "./Spotlight";
 import { TurnDots } from "./TurnDots";
 
-/** The close: one ask, then the footer on the same deep-teal ground. */
+const FOOTER_LINKS = [
+  { href: "#how", label: "How it works" },
+  { href: "#insights", label: "Insights" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
+];
+
+/** The close: one ask, then the footer on the same deep-teal ground, signed with a giant wordmark. */
 export function FinalCta() {
   return (
-    <div className="relative overflow-hidden bg-teal-ink text-white">
+    <div className="relative isolate overflow-hidden bg-teal-ink text-white">
+      <Spotlight tone="dark" />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-48 left-1/2 h-[620px] w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(14_124_123/0.45),transparent)]"
+        className="land-drift pointer-events-none absolute -top-48 left-1/2 h-[620px] w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(14_124_123/0.45),transparent)]"
       />
       <Container className="relative">
         <section aria-labelledby="start-title">
           <Reveal className="flex flex-col items-center py-24 text-center md:py-32">
             <TurnDots className="h-10 w-auto text-teal-bright" />
-            <h2 id="start-title" className="mt-8 max-w-[16ch] font-display text-[2.6rem] leading-[1.05] font-extrabold tracking-[-0.01em] text-balance md:text-[3.6rem]">
-              Start tomorrow&apos;s OPD on baari.
-            </h2>
+            <SectionTitle id="start-title" size="closing" inverse className="mt-8 max-w-[16ch]">
+              {"Start tomorrow's OPD on baari."}
+            </SectionTitle>
             <p className="mt-5 max-w-[44ch] text-[18px] leading-relaxed text-white/75">
               Create your clinic, add your doctors and print the QR poster tonight.
             </p>
             <div className="mt-9 flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
-              <PrimaryCta size="lg" />
+              <Magnetic>
+                <PrimaryCta size="lg" />
+              </Magnetic>
               <Link href={OPEN_APP_HREF} className="text-[16px] font-semibold text-white/80 underline-offset-4 hover:text-white hover:underline">
                 Already on baari? Sign in
               </Link>
@@ -43,21 +55,13 @@ export function FinalCta() {
           </div>
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-x-6 gap-y-2">
-              <li>
-                <a href="#how" className="text-white/70 hover:text-white">
-                  How it works
-                </a>
-              </li>
-              <li>
-                <a href="#cost" className="text-white/70 hover:text-white">
-                  Cost
-                </a>
-              </li>
-              <li>
-                <a href="#faq" className="text-white/70 hover:text-white">
-                  FAQ
-                </a>
-              </li>
+              {FOOTER_LINKS.map((l) => (
+                <li key={l.href}>
+                  <a href={l.href} className="text-white/70 hover:text-white">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
               <li>
                 <Link href={OPEN_APP_HREF} className="text-white/70 hover:text-white">
                   Sign in
@@ -68,6 +72,15 @@ export function FinalCta() {
           <p>&copy; {new Date().getFullYear()} baari</p>
         </footer>
       </Container>
+
+      {/* The signature: the wordmark, huge and faint, rising into place at the very bottom. */}
+      <div aria-hidden="true" className="pointer-events-none relative overflow-hidden select-none">
+        <Reveal y={120} amount={0.05}>
+          <p className="-mb-[0.22em] text-center font-display text-[30vw] leading-[0.9] font-extrabold tracking-[-0.03em] text-white/[0.05]">
+            baari
+          </p>
+        </Reveal>
+      </div>
     </div>
   );
 }

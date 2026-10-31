@@ -29,6 +29,10 @@ const QUESTIONS = [
     a: "Yes. Each doctor gets a letter, a room and their own queue, so tokens read A-12, B-07 and so on. The TV shows them side by side.",
   },
   {
+    q: "Which plan should I pick?",
+    a: "Count your patients in a month. Below 999, paying ₹1 per patient costs less. Above that, ₹999 a month works out cheaper. Over 26 OPD days, the switch-over comes at about 38 patients a day.",
+  },
+  {
     q: "Who can see patient names?",
     a: "Only your desk, behind staff PINs. The TV shows token numbers, never names, and a patient's phone shows only their own token.",
   },
