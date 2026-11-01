@@ -29,7 +29,7 @@ clinics/{clinicId}/staff/{staffId}           Staff          members (PIN hashes)
 clinics/{clinicId}/queues/{doctorId}_{date}  QueueDay       public read
 clinics/{clinicId}/tickets/{ticketId}        Ticket         public read, no PII
 clinics/{clinicId}/ticketPrivate/{ticketId}  TicketPrivate  members + the patient who joined
-clinics/{clinicId}/outbox/{id}               OutboxMessage  members create/read
+clinics/{clinicId}/outbox/{id}               (unused)       members create/read
 ```
 
 | Document | Fields | Notes |
@@ -42,7 +42,7 @@ clinics/{clinicId}/outbox/{id}               OutboxMessage  members create/read
 | `queues/{doctorId}_{date}` | `clinicId`, `doctorId`, `date`, `lastToken`, `paused` (`{reason, since, backAt}` or null), `doctorButtonSeenAt` | One per doctor per clinic-local day. Desk writes merge into it, so any of the last three may be missing. |
 | `tickets/{id}` | `clinicId`, `doctorId`, `date`, `token`, `label`, `status`, `position`, `priority`, `visitType`, `distance`, `source`, `createdAt`, `calledAt`, `lastCallAt`, `callCount`, `noReplyAt`, `finishedAt`, `consultMs`, `updatedBy`, `updatedAt` | Everything the TV and patient pages need, nothing that identifies a person. |
 | `ticketPrivate/{id}` | `clinicId`, `date`, `name`, `phone` (10 digits or null), `patientUid` | Same id as its ticket. `patientUid` is the anonymous uid of a QR patient, null for walk-ins. |
-| `outbox/{id}` | `clinicId`, `to` (10 digits), `kind`, `body`, `status` (`queued`), `createdAt` | WhatsApp messages for a server-side sender. |
+| `outbox/{id}` | `clinicId`, `to` (10 digits), `kind`, `body`, `status` (`queued`), `createdAt` | Not written by the app. Older builds queued WhatsApp pause messages here; nothing sends them. See [NOTIFICATIONS.md](NOTIFICATIONS.md). |
 
 **Dates and times.** `date` is the clinic-local `YYYY-MM-DD` (`src/lib/time.ts#dateKey`)
 and every query filters on it, so "today" resets at midnight with no cleanup job.
@@ -58,7 +58,7 @@ timers and ordering while offline.
 | Edit clinic, add/edit/deactivate doctors, add staff, reset PIN, remove staff | `updateClinic`, `upsertDoctor`, `setDoctorActive`, `addStaff`, `resetStaffPin`, `removeStaff` | `isMember` + full-document shape check |
 | Next patient, Call again, Not here, Priority, Back 2, Skip, No-show, Remove, Edit name, and Undo of each | `src/lib/queue/actions.ts` | `isMember` + `validTicket` / `validPrivate` on the resulting document |
 | Walk-in (online: transaction; offline: batch with `increment(1)`) | `addWalkIn` | `isMember` + `validQueue`, `validTicket`, `validPrivate` |
-| Pause (+ WhatsApp outbox docs), Resume, doctor's button heartbeat | `pauseQueue`, `resumeQueue`, `doctorButtonHeartbeat` | `isMember` + `validQueue` (merge writes), `validOutbox` |
+| Pause, Resume, doctor's button heartbeat | `pauseQueue`, `resumeQueue`, `doctorButtonHeartbeat` | `isMember` + `validQueue` (merge writes) |
 | Patient joins by QR: transaction creating or bumping the queue day, the ticket and its private doc | `joinQueue` (`src/lib/queue/patient.ts`) | `patientOpensQueue` or `patientTakesToken`, `patientJoins`, `patientCreatesPrivate` |
 | Patient updates how far they are | `updateDistance` | `patientOwnsTicket` + `patientUpdatesDistance` |
 | Patient leaves the queue | `leaveQueue` | `patientOwnsTicket` + `patientLeaves` |
@@ -73,9 +73,8 @@ so its join goes through the member branch; the patient branch is for everyone e
 **Membership is one document read.** `isMember(c)` is `exists()` on
 `clinics/{c}/members/{auth.uid}`. Rules may make at most 10 document reads per write
 and 20 per batch or transaction. Firestore caches repeated reads of the same document
-within a request, which is what keeps the desk's bigger batches (a pause that queues a
-WhatsApp message per waiting patient, the setup batch with many doctors) at a handful
-of reads. `scripts/seed.mjs` commits in batches of 20 writes so it doesn't depend on
+within a request, which is what keeps the desk's bigger batches (the setup batch with
+many doctors) at a handful of reads. `scripts/seed.mjs` commits in batches of 20 writes so it doesn't depend on
 that cache.
 
 **Setup in one batch.** `exists()`/`get()` see the database before a batch,
@@ -119,9 +118,13 @@ read allowance on them.
 while waiting or being served, or `status: "waiting" → "removed"` with `finishedAt`.
 Ownership is checked through `ticketPrivate/{id}.patientUid`.
 
-**Outbox is append-only for clients.** Members create `queued` messages and can read
-them; nobody can update or delete one from a browser. The sender runs with the Admin
-SDK, which bypasses rules, and owns `status` from then on.
+**Outbox is kept but unused.** Older builds wrote one `queued` WhatsApp message per
+waiting patient when a queue was paused; the app no longer does, and nothing sends
+them. The rule (members create and read, nobody updates or deletes) stays so a desk
+tab still on an older build, or holding a pause saved offline, doesn't have its whole
+pause batch refused. When patient messages are built, the plan is for the server to
+write this collection itself ([NOTIFICATIONS.md](NOTIFICATIONS.md)), after which the
+client `create` rule can go.
 
 ## Security notes
 

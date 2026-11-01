@@ -9,7 +9,7 @@ import { DEFAULT_TIMEZONE, formatClock } from "@/lib/time";
 /** 12:45 PM IST on the design's day, so "45 min" reads "(1:30 PM)". */
 const NOW = Date.parse("2026-10-29T12:45:00+05:30");
 
-/** Artboard 04: the pause dialog open for Dr. Anita Sharma with 9 people to notify. */
+/** Artboard 04: the pause dialog open for Dr. Anita Sharma. */
 export default function PauseQueuePreview() {
   const [open, setOpen] = useState(true);
   const [confirmed, setConfirmed] = useState<PauseFormInput | null>(null);
@@ -18,8 +18,7 @@ export default function PauseQueuePreview() {
     <main className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-scrim p-4 text-white">
       {confirmed && (
         <p className="text-[16px]">
-          Paused: {confirmed.reason}, back {confirmed.backAt ? formatClock(confirmed.backAt) : "not sure"},{" "}
-          {confirmed.notify ? "notifying" : "not notifying"} patients.
+          Paused: {confirmed.reason}, back {confirmed.backAt ? formatClock(confirmed.backAt) : "not sure"}.
         </p>
       )}
       <button
@@ -32,7 +31,6 @@ export default function PauseQueuePreview() {
       <PauseQueueModal
         open={open}
         doctorName={sharmaQueue.doctor.name}
-        waitingWithPhone={9}
         now={NOW}
         timezone={DEFAULT_TIMEZONE}
         onClose={() => setOpen(false)}

@@ -15,7 +15,6 @@ export const paths = {
   ticket: (clinicId: string, ticketId: string) => `clinics/${clinicId}/tickets/${ticketId}`,
   ticketPrivates: (clinicId: string) => `clinics/${clinicId}/ticketPrivate`,
   ticketPrivate: (clinicId: string, ticketId: string) => `clinics/${clinicId}/ticketPrivate/${ticketId}`,
-  outbox: (clinicId: string) => `clinics/${clinicId}/outbox`,
 };
 
 export function queueId(doctorId: string, date: string): string {

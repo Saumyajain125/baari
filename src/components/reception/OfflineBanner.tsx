@@ -23,7 +23,7 @@ export function OfflineBanner({ offlineFor, pendingCount }: OfflineBannerProps) 
           Internet is down. Keep working, we&apos;ll catch up.
         </p>
         <p className="text-[13px] sm:text-[14px]">
-          {saved}Patient phones and the TV will update when the connection is back. WhatsApp alerts are on hold.
+          {saved}Patient phones and the TV will update when the connection is back.
         </p>
       </div>
       <span className="flex-none rounded-full bg-amber-chip px-3 py-[6px] text-[13px] font-bold whitespace-nowrap">

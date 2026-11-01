@@ -9,7 +9,7 @@ who is being called. It keeps working when the clinic's internet drops.
   time, plus Call again, Not here (moves back 2), Priority, Back 2, Skip, No-show,
   Remove, Edit name. Every tap applies instantly with a 5 second Undo (Ctrl+Z on a
   laptop). Walk-in tokens with a printable thermal slip. Pause a doctor's queue with
-  a reason and an optional WhatsApp update. A staff PIN lock after 10 idle minutes.
+  a reason and a time they'll be back. A staff PIN lock after 10 idle minutes.
 - **Patients**: scan, type a name, get a token. No app and no sign-up. They see how
   many people are ahead with an ETA, can say how far away they are, or leave the queue.
 - **TV display**: tokens only, never names; a token flashes (with an optional chime) when it is called.
@@ -211,42 +211,17 @@ The desk is built to keep going when the internet drops:
   shows both, and the shared counter is incremented safely when the writes sync.
 - Patient phones and the TV catch up as soon as the desk's writes reach the server.
   Joining by QR needs a connection on the patient's phone (it is a transaction).
-- WhatsApp alerts are queued as outbox documents with the rest of the writes and go
-  out when the connection is back.
 
-## WhatsApp: the outbox integration point
+## Patient messages (not built yet)
 
-The app never sends WhatsApp messages itself. When reception pauses a queue with
-"Also send a WhatsApp update" ticked, the desk writes one document per waiting
-patient with a phone number to `clinics/{clinicId}/outbox/{id}`:
+baari sends no WhatsApp, SMS or call reminders today, and no screen promises them.
+Patients follow their place on the live status page, the TV and the desk calling
+out. The mobile number on the join form and the walk-in form is optional and is
+stored only in the members-only `ticketPrivate` doc.
 
-```ts
-{ clinicId, to: "9829012345", kind: "pause", body: "Sharma Family Clinic, token A-21. Doctor is on a short break (Lunch). ...", status: "queued", createdAt }
-```
-
-`kind` is one of `pause | resume | turn_soon | joined` (only `pause` is written today).
-To deliver them, deploy a server-side sender that uses the Admin SDK (which bypasses
-security rules). Browsers can create outbox documents but never update or delete
-them. For example, a Cloud Function (not part of this repo):
-
-```ts
-import { onDocumentCreated } from "firebase-functions/v2/firestore";
-
-export const sendWhatsApp = onDocumentCreated("clinics/{clinicId}/outbox/{id}", async (event) => {
-  const msg = event.data?.data();
-  if (!event.data || msg?.status !== "queued") return;
-  try {
-    await sendWhatsAppText(`+91${msg.to}`, msg.body); // WhatsApp Cloud API, Twilio, Gupshup, ...
-    await event.data.ref.update({ status: "sent", sentAt: Date.now() });
-  } catch (err) {
-    await event.data.ref.update({ status: "failed", error: String(err) });
-  }
-});
-```
-
-WhatsApp Business only allows business-initiated messages through pre-approved
-templates, so map each `kind` to a template and pass the token, reason and time as
-template parameters.
+Findings so far (which channels suit patients with basic phones, costs per message,
+and how reminders should be built when they are) are in
+[docs/NOTIFICATIONS.md](docs/NOTIFICATIONS.md).
 
 ## Scripts
 
@@ -267,6 +242,7 @@ template parameters.
 design/                  original design file, extracted artboards, reference PNGs
 docs/SPEC.md             build spec: tokens, data model, component contracts
 docs/FIREBASE.md         data model, security rules rationale, security notes
+docs/NOTIFICATIONS.md    patient messages (WhatsApp, SMS, voice): findings and plan, not built
 firestore.rules          Firestore security rules
 firestore.indexes.json   composite indexes (none needed today)
 firebase.json            Firebase CLI config: rules, indexes, emulators

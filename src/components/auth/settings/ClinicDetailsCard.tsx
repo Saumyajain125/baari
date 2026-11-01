@@ -82,7 +82,7 @@ export function ClinicDetailsCard({ clinic, onSave }: { clinic: Clinic; onSave(p
 
   return (
     <Card labelledBy={`${id}-title`}>
-      <CardHeader id={`${id}-title`} title="Clinic" description="Shown on the TV, token slips and WhatsApp updates." />
+      <CardHeader id={`${id}-title`} title="Clinic" description="Shown on the TV, token slips and patients' phones." />
       <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-[18px]">
         <TextField
           id={`${id}-name`}

@@ -215,7 +215,7 @@ function WalkInDialog({
 
           <div className="flex flex-col gap-2">
             <label htmlFor={phoneId} className="text-[15px] font-semibold">
-              Mobile <span className="font-normal text-muted">(optional, for WhatsApp updates)</span>
+              Mobile <span className="font-normal text-muted">(optional)</span>
             </label>
             <input
               ref={phoneRef}
@@ -225,7 +225,7 @@ function WalkInDialog({
               maxLength={16}
               autoComplete="off"
               enterKeyHint="go"
-              placeholder="Leave empty if no smartphone"
+              placeholder="10-digit number"
               value={draft.phone}
               onChange={(e) => edit("phone", e.target.value)}
               aria-invalid={errors.phone ? true : undefined}

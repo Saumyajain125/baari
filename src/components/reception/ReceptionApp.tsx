@@ -62,7 +62,6 @@ import { getFirebaseAuth } from "@/lib/firebase";
 import { useClinic, useDeskTickets, useDoctors, useNow, useQueueDays, useStaff } from "@/lib/hooks";
 import { initialsOf } from "@/lib/pin";
 import type { DeskContext } from "@/lib/queue/actions";
-import { waitingFor } from "@/lib/queue/logic";
 import { dateKey } from "@/lib/time";
 import { buildClinicHeader, buildDoctorQueueView } from "@/lib/view";
 
@@ -284,7 +283,6 @@ function ReceptionDesk({ session }: { session: ClinicSession }) {
         <PauseQueueModal
           open={pauseDoctor !== null}
           doctorName={pauseDoctor?.name ?? ""}
-          waitingWithPhone={pauseDoctor ? waitingFor(desk.tickets, pauseDoctor.id).filter((t) => t.phone).length : 0}
           now={now}
           timezone={timezone}
           onClose={() => setPauseFor(null)}

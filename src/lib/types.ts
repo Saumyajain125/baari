@@ -11,7 +11,6 @@
  *   clinics/{clinicId}/queues/{queueId}    QueueDay        public read; queueId = `${doctorId}_${date}`
  *   clinics/{clinicId}/tickets/{ticketId}  Ticket          public read; no names or phone numbers
  *   clinics/{clinicId}/ticketPrivate/{id}  TicketPrivate   members + the patient who joined
- *   clinics/{clinicId}/outbox/{id}         OutboxMessage   members only; WhatsApp messages to send
  *   users/{uid}                            UserProfile     the signed-in clinic account
  */
 
@@ -132,16 +131,6 @@ export interface TicketPrivate {
   phone: string | null;
   /** Anonymous-auth uid of a patient who joined by QR, so they can read their own ticket. */
   patientUid: string | null;
-}
-
-export interface OutboxMessage {
-  id: string;
-  clinicId: string;
-  to: string;
-  kind: "pause" | "resume" | "turn_soon" | "joined";
-  body: string;
-  status: "queued" | "sent" | "failed";
-  createdAt: number;
 }
 
 export interface UserProfile {

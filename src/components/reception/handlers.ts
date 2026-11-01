@@ -62,11 +62,9 @@ export interface PauseFormInput {
   reason: string;
   /** Epoch ms the doctor is expected back, or null for "Not sure". */
   backAt: number | null;
-  /** Also send a WhatsApp update to waiting patients with phones. */
-  notify: boolean;
 }
 
-/** Text shown on the TV, patient phones and WhatsApp while a queue is paused. */
+/** Text shown on the TV and patient phones while a queue is paused. */
 export function pauseMessage(reason: string, backAtLabel: string | null): string {
   const back = backAtLabel ? ` Back around ${backAtLabel}.` : "";
   return `Doctor is on a short break (${reason}).${back} Your place is safe.`;

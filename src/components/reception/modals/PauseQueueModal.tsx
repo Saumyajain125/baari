@@ -25,8 +25,6 @@ function shortReason(reason: string): string {
 export interface PauseQueueModalProps {
   open: boolean;
   doctorName: string;
-  /** "Also send a WhatsApp update to the 9 people waiting"; the checkbox is hidden at 0. */
-  waitingWithPhone: number;
   /** For the "45 min (1:30 PM)" labels and the backAt it confirms. */
   now: number;
   timezone: string;
@@ -37,7 +35,11 @@ export interface PauseQueueModalProps {
   solidBackdrop?: boolean;
 }
 
-/** Artboard 04. Defaults match the artboard: Lunch break, back in 45 min, notify on. */
+/**
+ * Artboard 04. Defaults match the artboard: Lunch break, back in 45 min.
+ * The artboard's "Also send a WhatsApp update" checkbox is left out until
+ * patient messages exist (docs/NOTIFICATIONS.md).
+ */
 export function PauseQueueModal(props: PauseQueueModalProps) {
   // Mounting the body only while open resets the choices on every opening.
   return props.open ? <PauseDialog {...props} /> : null;
@@ -45,7 +47,6 @@ export function PauseQueueModal(props: PauseQueueModalProps) {
 
 function PauseDialog({
   doctorName,
-  waitingWithPhone,
   now,
   timezone,
   onClose,
@@ -60,7 +61,6 @@ function PauseDialog({
   const [customReason, setCustomReason] = useState("");
   const [customError, setCustomError] = useState<string | null>(null);
   const [backIn, setBackIn] = useState<BackInChoice>(45);
-  const [notify, setNotify] = useState(true);
   const customRef = useRef<HTMLInputElement>(null);
 
   const reason = reasonChoice === CUSTOM ? customReason.trim() : shortReason(reasonChoice);
@@ -85,7 +85,7 @@ function PauseDialog({
       customRef.current?.focus();
       return;
     }
-    onConfirm({ reason, backAt, notify: notify && waitingWithPhone > 0 });
+    onConfirm({ reason, backAt });
   }
 
   return (
@@ -197,17 +197,6 @@ function PauseDialog({
                 message
               )}
             </p>
-            {waitingWithPhone > 0 && (
-              <label className="flex min-h-11 items-center gap-2.5 text-[15px]">
-                <input
-                  type="checkbox"
-                  checked={notify}
-                  onChange={(e) => setNotify(e.target.checked)}
-                  className="m-0 size-[22px] shrink-0 accent-teal"
-                />
-                {`Also send a WhatsApp update to the ${waitingWithPhone} ${waitingWithPhone === 1 ? "person" : "people"} waiting`}
-              </label>
-            )}
           </div>
 
           <div className="flex gap-2.5">

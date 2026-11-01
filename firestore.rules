@@ -367,8 +367,11 @@ service cloud.firestore {
         allow delete: if isMember(c);
       }
 
-      // WhatsApp messages queued by the desk. A server-side sender (Admin SDK,
-      // which bypasses these rules) delivers them and updates their status.
+      // WhatsApp messages the desk used to queue when pausing a queue. The app
+      // no longer writes these (patient messages are deferred, see
+      // docs/NOTIFICATIONS.md). The rule stays so that a desk tab still running
+      // an older build, or holding a pause it saved offline, doesn't have its
+      // whole pause batch refused. Nothing sends what lands here.
       match /outbox/{id} {
         allow read: if isMember(c);
         allow create: if isMember(c) && validOutbox(c, request.resource.data);

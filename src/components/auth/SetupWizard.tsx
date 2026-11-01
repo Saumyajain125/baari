@@ -45,7 +45,7 @@ const STEPS: { id: SetupStep; label: string; detail: string; title: string; intr
     label: "Clinic",
     detail: "Name and time zone",
     title: "Name your clinic",
-    intro: "Patients see this name on the TV, their token slip and WhatsApp updates.",
+    intro: "Patients see this name on the TV, their token slip and their phone.",
   },
   {
     id: "doctors",

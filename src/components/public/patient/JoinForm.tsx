@@ -221,7 +221,7 @@ export function JoinForm({ clinicName, dateLabel, doctors, existing, onSubmit, i
 
             <div className="flex flex-col gap-2">
               <label htmlFor={`${ids}-phone`} className="text-[15px] font-semibold">
-                Mobile <span className="font-normal text-muted">(optional, for WhatsApp updates)</span>
+                Mobile <span className="font-normal text-muted">(optional)</span>
               </label>
               <input
                 ref={phoneRef}
@@ -230,7 +230,7 @@ export function JoinForm({ clinicName, dateLabel, doctors, existing, onSubmit, i
                 type="tel"
                 inputMode="tel"
                 autoComplete="tel-national"
-                placeholder="Leave empty if no smartphone"
+                placeholder="10-digit number"
                 value={phone}
                 onChange={(e) => {
                   setPhone(e.target.value);

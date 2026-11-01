@@ -31,10 +31,9 @@ import {
   servingFor,
   waitingFor,
 } from "@/lib/queue/logic";
-import { formatClock, formatSlipStamp } from "@/lib/time";
+import { formatSlipStamp } from "@/lib/time";
 import type { Clinic, DeskTicket, Doctor, QueueDay, Ticket } from "@/lib/types";
 import {
-  pauseMessage,
   type IssuedSlip,
   type PauseFormInput,
   type ReceptionHandlers,
@@ -312,14 +311,7 @@ export function createDeskActions(get: () => DeskDeps): DeskActions {
     attempt("Couldn't pause the queue", (s) => {
       // The modal already turns "Lunch break" into "Lunch"; typed reasons stay as written.
       const reason = input.reason.trim() || "Break";
-      const backAtLabel = input.backAt !== null ? formatClock(input.backAt, s.clinic.timezone) : null;
-      const message = pauseMessage(reason, backAtLabel);
-      const notify = input.notify
-        ? waitingFor(s.tickets, doctorId).flatMap((t) =>
-            t.phone ? [{ phone: t.phone, body: `${s.clinic.name}, token ${t.label}. ${message}` }] : [],
-          )
-        : [];
-      send("Couldn't pause the queue", pauseQueue(s.ctx, { doctorId, reason, backAt: input.backAt, notify }));
+      send("Couldn't pause the queue", pauseQueue(s.ctx, { doctorId, reason, backAt: input.backAt }));
     });
   }
 

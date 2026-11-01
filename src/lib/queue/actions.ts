@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase";
 import { paths } from "@/lib/paths";
-import type { DeskTicket, Doctor, OutboxMessage, PauseInfo, QueueDay, Ticket, TicketPrivate, VisitType } from "@/lib/types";
+import type { DeskTicket, Doctor, PauseInfo, QueueDay, Ticket, TicketPrivate, VisitType } from "@/lib/types";
 import {
   MOVE_BACK_PLACES,
   positionAfterMoveBack,
@@ -392,8 +392,6 @@ export interface PauseInput {
   doctorId: string;
   reason: string;
   backAt: number | null;
-  /** WhatsApp text for each waiting patient with a phone; empty to skip notifying. */
-  notify: { phone: string; body: string }[];
 }
 
 /** Pauses one doctor's queue. Places are kept; ETAs freeze until resumed. */
@@ -407,17 +405,6 @@ export function pauseQueue(ctx: DeskContext, input: PauseInput): Promise<void> {
     { clinicId: ctx.clinicId, doctorId: input.doctorId, date: ctx.date, paused },
     { merge: true },
   );
-  for (const n of input.notify) {
-    const msg: Omit<OutboxMessage, "id"> = {
-      clinicId: ctx.clinicId,
-      to: n.phone,
-      kind: "pause",
-      body: n.body,
-      status: "queued",
-      createdAt: now,
-    };
-    batch.set(doc(collection(db, paths.outbox(ctx.clinicId))), msg);
-  }
   return batch.commit();
 }
 

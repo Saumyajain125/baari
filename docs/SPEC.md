@@ -60,7 +60,7 @@ clinics/{clinicId}/staff/{staffId}     Staff           members only (PIN hashes)
 clinics/{clinicId}/queues/{doctorId}_{date}  QueueDay  public read (lastToken, paused, doctor heartbeat)
 clinics/{clinicId}/tickets/{id}        Ticket          public read, NO names/phones
 clinics/{clinicId}/ticketPrivate/{id}  TicketPrivate   members + the patient who joined (name, phone)
-clinics/{clinicId}/outbox/{id}         OutboxMessage   WhatsApp messages queued for a sender
+clinics/{clinicId}/outbox/{id}         (unused)        reserved for patient messages, see docs/NOTIFICATIONS.md
 users/{uid}                            UserProfile     { clinicId } for the signed-in clinic account
 ```
 
@@ -103,7 +103,8 @@ they hold state or handlers.
 export function OfflineBanner(props: { offlineFor: string /* "1:24" */; pendingCount: number }): JSX.Element
 // Artboard 07 top banner: "Internet is down. Keep working, we'll catch up." /
 // "{n} taps saved on this tablet. Patient phones and the TV will update when the
-// connection is back. WhatsApp alerts are on hold." + pill "Offline 1:24".
+// connection is back." + pill "Offline 1:24". (The artboard's "WhatsApp alerts are
+// on hold." is left out until patient messages exist.)
 
 // src/components/reception/UndoToast.tsx
 export function UndoToast(props: { message: string; secondsLeft: number; onUndo(): void }): JSX.Element
@@ -236,8 +237,8 @@ export interface AddWalkInModalProps {
 }
 ```
 Form: doctor choice (2-col grid of toggle buttons `A · Dr. Anita Sharma`), Patient
-name (autofocus, required), Mobile "(optional, for WhatsApp updates)" with
-placeholder "Leave empty if no smartphone" (validate with `normalizePhone`, inline
+name (autofocus, required), Mobile "(optional)" with
+placeholder "10-digit number" (validate with `normalizePhone`, inline
 error), Visit type (New / Follow-up / Emergency; Emergency styled danger and
 explained as "goes to the front"), Cancel + "Issue token A-25". After submit the
 **slip card** (right panel in the artboard) appears: "✓ Token issued", printed-slip
@@ -254,7 +255,6 @@ the form instead of sitting beside it.
 export interface PauseQueueModalProps {
   open: boolean;
   doctorName: string;
-  waitingWithPhone: number;          // "Also send a WhatsApp update to the 9 people waiting"
   now: number;                       // for "45 min (1:30 PM)" labels
   timezone: string;
   onClose(): void;
@@ -265,8 +265,8 @@ Reason chips (Lunch break, Emergency case, Ward round, Tea break, Type your own 
 reveals a text input), Back in chips (15 min, 30 min, 45 min, Not sure; the
 selected one shows its clock time "(1:30 PM)"), preview box "Patients and TV will
 show" using `pauseMessage(shortReason, backAtLabel)` where shortReason drops " break"/
-" case" ("Lunch break" → "Lunch"), WhatsApp checkbox (hidden when 0 phones), Cancel +
-dark "Pause queue" button. Default selection as in the artboard (Lunch, 45 min).
+" case" ("Lunch break" → "Lunch"), Cancel + dark "Pause queue" button. The artboard's
+WhatsApp checkbox is left out until patient messages exist (docs/NOTIFICATIONS.md). Default selection as in the artboard (Lunch, 45 min).
 
 ### PinLock (artboard 06)
 
@@ -348,7 +348,7 @@ export function ClinicGate(props: { children: (session: ClinicSession) => React.
 - Offline: `useConnectivity()` + `fromCache`; show `OfflineBanner` with elapsed time
   and the number of taps made while offline.
 - Modals: AddWalkIn (→ `addWalkIn`, then build `IssuedSlip` with ahead count + ETA),
-  PauseQueue (→ `pauseQueue` with WhatsApp outbox bodies via `pauseMessage`).
+  PauseQueue (→ `pauseQueue`).
 - Lock: `useIdleLock(clinic.lockAfterMin)`, lock state persisted in `localStorage`
   (so refresh stays locked); `PinLock` overlays the app; `staffId` from unlock feeds
   `DeskContext.staffId`. Lock button in Settings menu / `onLock`.

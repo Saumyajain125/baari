@@ -203,23 +203,21 @@ describe("walk-in slip", () => {
 });
 
 describe("pause", () => {
-  it("sends the pause message only to waiting patients with a phone", () => {
-    const { desk } = setup([
-      ticket(20, { phone: "9829012345" }),
-      ticket(21),
-      ticket(22, { phone: "9876543210", status: "done" }),
-    ]);
+  it("pauses with the reason and return time, and messages nobody", () => {
+    const { desk } = setup([ticket(20, { phone: "9829012345" }), ticket(21)]);
+    const backAt = Date.UTC(2026, 9, 29, 8, 0);
 
-    desk.confirmPause(doctor.id, { reason: "Lunch", backAt: Date.UTC(2026, 9, 29, 8, 0), notify: true });
+    desk.confirmPause(doctor.id, { reason: "Lunch", backAt });
 
-    const input = vi.mocked(actions.pauseQueue).mock.calls[0][1];
-    expect(input.reason).toBe("Lunch");
-    expect(input.notify).toEqual([
-      {
-        phone: "9829012345",
-        body: "Sharma Family Clinic, token A-20. Doctor is on a short break (Lunch). Back around 1:30 PM. Your place is safe.",
-      },
-    ]);
+    expect(vi.mocked(actions.pauseQueue).mock.calls[0][1]).toEqual({ doctorId: doctor.id, reason: "Lunch", backAt });
+  });
+
+  it("falls back to 'Break' when the typed reason is blank", () => {
+    const { desk } = setup([ticket(20)]);
+
+    desk.confirmPause(doctor.id, { reason: "   ", backAt: null });
+
+    expect(vi.mocked(actions.pauseQueue).mock.calls[0][1].reason).toBe("Break");
   });
 
   it("keeps Next and Not here off while paused, with a notice instead", () => {
