@@ -95,6 +95,7 @@ export function LaptopReception({ header, queues, offline, handlers }: LaptopRec
         onLock={handlers.onLock}
         onPrintPoster={handlers.onPrintPoster}
         onOpenSettings={handlers.onOpenSettings}
+        onOpenInsights={handlers.onOpenInsights}
       />
 
       <main

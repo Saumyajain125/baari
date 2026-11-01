@@ -196,6 +196,28 @@
   border-radius: 999px;
 }
 
+/*
+ * Insights: a chart line draws itself from left to right whenever its data
+ * changes (the path sets pathLength="1" and is keyed on its shape).
+ */
+@keyframes insights-draw {
+  from {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The dash only exists while drawing (fill-mode backwards), so the finished line is plain. */
+@media (prefers-reduced-motion: no-preference) {
+  .insights-draw {
+    animation: insights-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) backwards;
+  }
+}
+
 /* In-page links (#how, #cost) glide instead of jumping. */
 @media (prefers-reduced-motion: no-preference) {
   html:has(#main) {

@@ -45,6 +45,7 @@ export function TabletReception({ header, doctors, selectedDoctorId, queue, offl
         onLock={handlers.onLock}
         onPrintPoster={handlers.onPrintPoster}
         onOpenSettings={handlers.onOpenSettings}
+        onOpenInsights={handlers.onOpenInsights}
       />
       <DoctorTabs
         doctors={doctors}

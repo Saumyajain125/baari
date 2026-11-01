@@ -316,6 +316,12 @@ radii, generous touch targets). Keep them calm and legible from a distance.
 - `/login`, `/setup`, `/settings`, `/`: clinic account sign-in/up (email+password),
   first-run setup (clinic name, doctors with prefix/room/start time, staff with
   PINs), settings to edit the same, root redirect.
+- `/insights`: consult insights for the clinic account (desk Settings menu → Insights,
+  or "Your consult insights" on the doctor's button). Reads public tickets over 7 days,
+  30 days or 3 months (`useTicketsBetween`) and summarises them with `src/lib/insights.ts`:
+  patients seen, average consult, average wait, no-shows, consult by day/week, patients
+  seen by day/week, tokens by hour, consult by visit type, doctors side by side.
+  `?doctor=<id>&range=7d|30d|3m` preselect; preview at `/preview/insights`.
 
 ### ClinicGate (owned by the Auth agent; used by reception, settings, doctor button)
 

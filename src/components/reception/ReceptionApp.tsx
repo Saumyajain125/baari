@@ -173,6 +173,7 @@ function ReceptionDesk({ session }: { session: ClinicSession }) {
       openPause: setPauseFor,
       lock: () => (lock.enabled ? lock.lock() : showToast("Add staff PINs in Settings to lock the desk.", "info")),
       openSettings: () => router.push("/settings"),
+      openInsights: () => router.push("/insights"),
       toast: showToast,
     },
   });

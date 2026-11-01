@@ -20,6 +20,7 @@ export const previewHandlers: ReceptionHandlers = {
   onUndo: noop,
   onOpenTv: noop,
   onOpenSettings: noop,
+  onOpenInsights: noop,
   onPrintPoster: noop,
   onLock: noop,
 };

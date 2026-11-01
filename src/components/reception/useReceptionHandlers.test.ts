@@ -121,6 +121,7 @@ function setup(tickets: DeskTicket[], queueDay: Partial<QueueDay> = {}) {
       openPause: vi.fn(),
       lock: vi.fn(),
       openSettings: vi.fn(),
+      openInsights: vi.fn(),
       toast: vi.fn(),
     },
   };

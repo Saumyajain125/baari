@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import { QrIcon, SettingsIcon, TvIcon } from "@/components/icons";
+import { ChartIcon, QrIcon, SettingsIcon, TvIcon } from "@/components/icons";
 
 export interface SettingsMenuProps {
   onLock(): void;
   onPrintPoster(): void;
   onOpenSettings(): void;
+  onOpenInsights(): void;
   /** Adds "Open TV display", for layouts without their own TV button. */
   onOpenTv?(): void;
   /** 44px trigger for the laptop and phone headers (tablet's is 48px). */
@@ -25,7 +26,14 @@ interface MenuItem {
  * away, following the WAI-ARIA menu button pattern: arrows / Home / End move
  * focus, Esc returns focus to the button, Tab or a click outside closes it.
  */
-export function SettingsMenu({ onLock, onPrintPoster, onOpenSettings, onOpenTv, compact = false }: SettingsMenuProps) {
+export function SettingsMenu({
+  onLock,
+  onPrintPoster,
+  onOpenSettings,
+  onOpenInsights,
+  onOpenTv,
+  compact = false,
+}: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -35,6 +43,7 @@ export function SettingsMenu({ onLock, onPrintPoster, onOpenSettings, onOpenTv, 
     { key: "lock", label: "Lock desk", icon: <LockIcon />, run: onLock },
     { key: "poster", label: "Print QR poster", icon: <QrIcon size={20} />, run: onPrintPoster },
     ...(onOpenTv ? [{ key: "tv", label: "Open TV display", icon: <TvIcon size={20} />, run: onOpenTv }] : []),
+    { key: "insights", label: "Insights", icon: <ChartIcon size={20} />, run: onOpenInsights },
     { key: "settings", label: "Clinic settings", icon: <SettingsIcon size={20} />, run: onOpenSettings },
   ];
 

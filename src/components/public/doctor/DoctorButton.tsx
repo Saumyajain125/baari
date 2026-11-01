@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowRightIcon, BellIcon, ClockIcon, PauseIcon, PlayIcon, WifiOffIcon } from "@/components/icons";
+import Link from "next/link";
+import { ArrowRightIcon, BellIcon, ChartIcon, ClockIcon, PauseIcon, PlayIcon, WifiOffIcon } from "@/components/icons";
 import { ClinicIdentity } from "@/components/reception/ClinicIdentity";
 import { cx, eyebrowClass } from "@/components/public/ui";
 
@@ -26,13 +27,15 @@ export interface DoctorButtonProps {
   onNext(): void;
   onCallAgain(): void;
   onResume(): void;
+  /** This doctor's consult times over days and weeks; adds a link in the header. */
+  insightsHref?: string;
 }
 
 /**
  * The doctor's room screen: who is in the room, how many are waiting, and one
  * huge "Next patient" button, the same action as the desk's (artboard 01).
  */
-export function DoctorButton({ view, onNext, onCallAgain, onResume }: DoctorButtonProps) {
+export function DoctorButton({ view, onNext, onCallAgain, onResume, insightsHref }: DoctorButtonProps) {
   const { serving, nextUp } = view;
 
   return (
@@ -140,6 +143,15 @@ export function DoctorButton({ view, onNext, onCallAgain, onResume }: DoctorButt
               {view.linked ? "Linked to reception" : "Connecting to reception…"}
             </p>
           </div>
+          {insightsHref && (
+            <Link
+              href={insightsHref}
+              className="flex h-11 items-center justify-center gap-2 self-center rounded-[12px] px-4 text-[15px] font-semibold text-teal-dark no-underline hover:bg-hover"
+            >
+              <ChartIcon size={20} />
+              Your consult insights
+            </Link>
+          )}
         </div>
       </main>
     </div>

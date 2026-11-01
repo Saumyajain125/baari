@@ -59,6 +59,7 @@ export interface DeskUi {
   openPause(doctorId: string): void;
   lock(): void;
   openSettings(): void;
+  openInsights(): void;
   toast(message: string, tone: ToastTone): void;
 }
 
@@ -252,6 +253,7 @@ export function createDeskActions(get: () => DeskDeps): DeskActions {
     onOpenTv: () => window.open(`/tv/${encodeURIComponent(get().ctx.clinicId)}`, "baari-tv"),
     onPrintPoster: () => window.open(`/poster/${encodeURIComponent(get().ctx.clinicId)}`, "baari-poster"),
     onOpenSettings: () => get().ui.openSettings(),
+    onOpenInsights: () => get().ui.openInsights(),
     onLock: () => get().ui.lock(),
   };
 

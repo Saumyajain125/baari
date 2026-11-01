@@ -352,6 +352,53 @@ export function usePublicTickets(clinicId: string | null | undefined, date: stri
   );
 }
 
+export interface TicketRange {
+  /**
+   * Tickets dated `from` to `to`. While a new range loads this still holds the
+   * previous range's tickets (with `loading` true), so the screen can dim
+   * instead of blanking; it is empty only before the first snapshot.
+   */
+  tickets: Ticket[];
+  loading: boolean;
+  error: Error | null;
+  /** True while the snapshot comes from this device's cache (still updating, or offline). */
+  fromCache: boolean;
+}
+
+interface RangeSnap {
+  key: string | null;
+  tickets: Ticket[];
+  fromCache: boolean;
+  error: Error | null;
+}
+
+/**
+ * Public (name-free) tickets for a range of clinic-local dates, for insights.
+ * A range on `date` alone is covered by Firestore's automatic single-field index.
+ */
+export function useTicketsBetween(clinicId: string | null | undefined, from: string, to: string): TicketRange {
+  const key = clinicId ? `${paths.tickets(clinicId)}?from=${from}&to=${to}` : null;
+  const [snap, setSnap] = useState<RangeSnap>({ key: null, tickets: NO_ITEMS, fromCache: false, error: null });
+
+  useEffect(() => {
+    if (!clinicId || !key) return;
+    return onSnapshot(
+      query(collection(getDb(), paths.tickets(clinicId)), where("date", ">=", from), where("date", "<=", to)),
+      { includeMetadataChanges: true },
+      (s) => setSnap({ key, tickets: s.docs.map(toTicket), fromCache: s.metadata.fromCache, error: null }),
+      (error) => setSnap((prev) => ({ ...prev, key, error })),
+    );
+  }, [clinicId, from, to, key]);
+
+  const current = key !== null && snap.key === key;
+  return {
+    tickets: snap.tickets,
+    loading: key !== null && !current,
+    error: current ? snap.error : null,
+    fromCache: current && snap.fromCache,
+  };
+}
+
 /** One ticket by id (public fields). */
 export function useTicket(clinicId: string | null | undefined, ticketId: string | null | undefined) {
   return useDocSub(clinicId && ticketId ? paths.ticket(clinicId, ticketId) : null, toTicket);

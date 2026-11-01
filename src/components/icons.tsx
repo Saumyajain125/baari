@@ -156,3 +156,5 @@ export const UndoIcon = strokeIcon(
     <path d="M4 9h10a6 6 0 0 1 0 12h-3" />
   </>,
 );
+/** Not in the design: bar chart for Insights, drawn on the same grid and stroke as the rest. */
+export const ChartIcon = strokeIcon(<path d="M4 20h16M7 16v-4M12 16V6M17 16v-7" />);

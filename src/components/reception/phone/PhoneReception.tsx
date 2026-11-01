@@ -144,6 +144,7 @@ export function PhoneReception({
         onLock={handlers.onLock}
         onPrintPoster={handlers.onPrintPoster}
         onOpenSettings={handlers.onOpenSettings}
+        onOpenInsights={handlers.onOpenInsights}
       />
 
       {multiDoctor && (

@@ -139,6 +139,7 @@ export function PhonePreview({ state, sheetFor }: { state?: string; sheetFor?: s
     onUndo: log("onUndo"),
     onOpenTv: log("onOpenTv"),
     onOpenSettings: log("onOpenSettings"),
+    onOpenInsights: log("onOpenInsights"),
     onPrintPoster: log("onPrintPoster"),
     onLock: log("onLock"),
   };

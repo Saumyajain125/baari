@@ -14,6 +14,7 @@ export interface PhoneHeaderProps {
   onLock(): void;
   onPrintPoster(): void;
   onOpenSettings(): void;
+  onOpenInsights(): void;
 }
 
 /**
@@ -30,6 +31,7 @@ export function PhoneHeader({
   onLock,
   onPrintPoster,
   onOpenSettings,
+  onOpenInsights,
 }: PhoneHeaderProps) {
   const { stats } = header;
   const whose = doctorName ? ` for ${doctorName}` : "";
@@ -68,6 +70,7 @@ export function PhoneHeader({
           onPrintPoster={onPrintPoster}
           onOpenTv={onOpenTv}
           onOpenSettings={onOpenSettings}
+          onOpenInsights={onOpenInsights}
         />
       </div>
     </header>

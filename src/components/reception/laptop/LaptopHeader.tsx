@@ -18,6 +18,7 @@ export interface LaptopHeaderProps {
   onLock(): void;
   onPrintPoster(): void;
   onOpenSettings(): void;
+  onOpenInsights(): void;
 }
 
 /**
@@ -35,6 +36,7 @@ export function LaptopHeader({
   onLock,
   onPrintPoster,
   onOpenSettings,
+  onOpenInsights,
 }: LaptopHeaderProps) {
   const { stats } = header;
 
@@ -107,7 +109,13 @@ export function LaptopHeader({
         >
           <TvIcon size={20} />
         </button>
-        <SettingsMenu compact onLock={onLock} onPrintPoster={onPrintPoster} onOpenSettings={onOpenSettings} />
+        <SettingsMenu
+          compact
+          onLock={onLock}
+          onPrintPoster={onPrintPoster}
+          onOpenSettings={onOpenSettings}
+          onOpenInsights={onOpenInsights}
+        />
       </div>
     </header>
   );

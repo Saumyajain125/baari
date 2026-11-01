@@ -28,6 +28,8 @@ export interface ReceptionHandlers {
   onUndo(): void;
   onOpenTv(): void;
   onOpenSettings(): void;
+  /** Consult times and busy hours over days and weeks (/insights). */
+  onOpenInsights(): void;
   onPrintPoster(): void;
   onLock(): void;
 }

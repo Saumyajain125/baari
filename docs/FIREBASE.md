@@ -172,10 +172,12 @@ SDK, which bypasses rules, and owns `status` from then on.
 
 ## Indexes
 
-Every query is either an equality filter on `date` (tickets, ticketPrivate, queues;
-`src/lib/hooks.ts`) or a single `orderBy("order")` (doctors, staff). Firestore's
+Every query is an equality filter on `date` (tickets, ticketPrivate, queues;
+`src/lib/hooks.ts`), a range on `date` alone (`useTicketsBetween`, the public tickets
+behind `/insights`), or a single `orderBy("order")` (doctors, staff). Firestore's
 automatic single-field indexes cover all of them, so `firestore.indexes.json` declares
-no composite indexes. A query that combines a filter with an order on another field,
+no composite indexes. Insights filter by doctor and status in the browser for the same
+reason. A query that combines a filter with an order on another field,
 for example `where("active", "==", true)` plus `orderBy("order")`, would need one.
 
 ## Checking the rules

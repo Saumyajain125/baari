@@ -215,6 +215,7 @@ function DoctorRoom({ session, doctorId }: { session: ClinicSession; doctorId: s
         onNext={next}
         onCallAgain={again}
         onResume={resume}
+        insightsHref={`/insights?doctor=${encodeURIComponent(doctorId)}&from=doctor`}
       />
       {undoSlot.current && (
         <UndoToast message={undoSlot.current.entry.message} secondsLeft={undoSlot.current.secondsLeft} onUndo={undoLast} />

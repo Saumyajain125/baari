@@ -10,10 +10,19 @@ export interface TabletHeaderProps {
   onLock(): void;
   onPrintPoster(): void;
   onOpenSettings(): void;
+  onOpenInsights(): void;
 }
 
 /** Top bar (72px plus its rule): clinic identity, day stats, Add walk-in, TV and Settings. */
-export function TabletHeader({ header, onAddWalkIn, onOpenTv, onLock, onPrintPoster, onOpenSettings }: TabletHeaderProps) {
+export function TabletHeader({
+  header,
+  onAddWalkIn,
+  onOpenTv,
+  onLock,
+  onPrintPoster,
+  onOpenSettings,
+  onOpenInsights,
+}: TabletHeaderProps) {
   return (
     <header className="flex h-[73px] flex-none items-center gap-5 border-b border-line bg-surface px-5">
       <ClinicIdentity clinicName={header.clinicName} subtitle={`${header.dateLabel} · ${header.session} session`} />
@@ -34,7 +43,12 @@ export function TabletHeader({ header, onAddWalkIn, onOpenTv, onLock, onPrintPos
       >
         <TvIcon size={22} />
       </button>
-      <SettingsMenu onLock={onLock} onPrintPoster={onPrintPoster} onOpenSettings={onOpenSettings} />
+      <SettingsMenu
+        onLock={onLock}
+        onPrintPoster={onPrintPoster}
+        onOpenSettings={onOpenSettings}
+        onOpenInsights={onOpenInsights}
+      />
     </header>
   );
 }

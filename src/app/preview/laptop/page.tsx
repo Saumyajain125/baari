@@ -98,6 +98,7 @@ export default function LaptopPreview({ searchParams }: { searchParams: Promise<
     onAddWalkIn: (doctorId) => console.info("Add walk-in", doctorId ?? "(no doctor preselected)"),
     onOpenTv: () => {},
     onOpenSettings: () => {},
+    onOpenInsights: () => {},
     onPrintPoster: () => {},
     onLock: () => {},
   };
