@@ -110,7 +110,7 @@ export function JoinForm({ clinicName, dateLabel, doctors, existing, onSubmit, i
         <div className="px-1">
           <h1 className="font-display text-[28px] leading-tight font-bold">Join the queue</h1>
           <p className="mt-1 text-[15px] leading-snug text-pretty text-muted">
-            Get a token on your phone and wait anywhere. We&apos;ll show your place and tell you when it&apos;s your turn.
+            Get a token on your phone and wait anywhere. Keep the page open to see your place and when it&apos;s your turn.
           </p>
         </div>
 

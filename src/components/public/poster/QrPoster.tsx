@@ -40,7 +40,7 @@ function useSheetZoom(): number {
 const STEPS: { en: string; hi: string }[] = [
   { en: "Scan with your phone camera", hi: "फ़ोन के कैमरे से स्कैन करें" },
   { en: "Enter your name and pick the doctor", hi: "अपना नाम लिखें, डॉक्टर चुनें" },
-  { en: "Wait anywhere. Your phone tells you when it's your turn", hi: "कहीं भी इंतज़ार करें, बारी आने पर फ़ोन बताएगा" },
+  { en: "Wait anywhere. Keep the page open to see when it's your turn", hi: "कहीं भी इंतज़ार करें, पेज खुला रखें, बारी वहीं दिखेगी" },
 ];
 
 export interface QrPosterProps {

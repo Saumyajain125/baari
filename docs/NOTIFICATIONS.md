@@ -29,6 +29,21 @@ Before this change the app promised WhatsApp updates that nothing delivered:
 | Offline banner (artboard 07) | "WhatsApp alerts are on hold." | Removed |
 | Landing page screenshot `public/landing/patient-join.webp` | Showed the WhatsApp label | Retaken from `/preview/join` |
 
+The "your phone tells you when it's your turn" lines were softened too, because the
+status page can only alert a patient while it is open:
+
+| Where | Was | Now |
+|-------|-----|-----|
+| QR join form intro | "We'll show your place and tell you when it's your turn." | "Keep the page open to see your place and when it's your turn." |
+| TV, beside the join QR | "Your phone shows your place and tells you when it's your turn." | "Keep the page open on your phone to see when it's your turn." |
+| QR poster, step 3 | "Your phone tells you when it's your turn" / "बारी आने पर फ़ोन बताएगा" | "Keep the page open to see when it's your turn" / "पेज खुला रखें, बारी वहीं दिखेगी" |
+| Landing page statement | "Their phone tells them when it's their turn." | "One look at their phone shows how near their turn is." |
+| Landing page, how it works | "...and their phone tells them it's their turn." | "...and the page on their phone shows it's their turn." |
+
+The landing page's poster (`poster.webp`), TV (`tv.webp`) and join screenshots were
+retaken to match. Clinics that already printed the poster still have the old step 3;
+reprinting it (desk settings menu > Print QR poster) picks up the new text.
+
 The `outbox` collection's security rule is **kept**: a desk tab still running an older
 build (or holding a pause it saved offline) would otherwise have its whole pause batch
 refused once new rules are deployed. Nothing reads or sends those docs. The

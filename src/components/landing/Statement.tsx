@@ -9,7 +9,7 @@ import { TurnDots } from "./TurnDots";
 
 /** Words starting with "*" are set in teal. */
 const TEXT =
-  "Your patients wait wherever they like: at home, at the chemist, over a cup of chai. Their phone tells them when *it's *their *turn. Your door stays quiet, and your OPD runs in order.";
+  "Your patients wait wherever they like: at home, at the chemist, over a cup of chai. One look at their phone shows how near *their *turn *is. Your door stays quiet, and your OPD runs in order.";
 const WORDS = TEXT.split(" ").map((w) => ({ text: w.replace(/^\*/, ""), accent: w.startsWith("*") }));
 
 /**

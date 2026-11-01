@@ -360,7 +360,7 @@ function JoinRail({ joinUrl }: { joinUrl: string | null }) {
         </p>
       </div>
       <p className="border-t border-divider pt-6 text-[22px] leading-snug text-balance text-muted">
-        Wait anywhere. Your phone shows your place and tells you when it&apos;s your turn.
+        Wait anywhere. Keep the page open on your phone to see when it&apos;s your turn.
       </p>
     </aside>
   );

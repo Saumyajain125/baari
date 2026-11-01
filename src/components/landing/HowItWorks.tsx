@@ -50,7 +50,7 @@ const BEATS: Beat[] = [
   },
   {
     title: "The TV calls them in",
-    body: "Their token flashes on the waiting-room TV, with a chime if you want one, and their phone tells them it's their turn.",
+    body: "Their token flashes on the waiting-room TV, with a chime if you want one, and the page on their phone shows it's their turn.",
     img: {
       src: "/landing/patient-turn.webp",
       alt: "A patient's phone saying It's your turn, please go to Room 2, token A-23",
